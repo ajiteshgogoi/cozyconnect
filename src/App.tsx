@@ -76,7 +76,7 @@ const App: React.FC = () => {
           <p className="text-red-500">{error}</p>
         )}
       </div>
-      <footer className="absolute bottom-4 w-full text-center">
+      <footer className="relative mt-8 w-full text-center">
         <a 
           href="https://ajiteshgogoi.com/" 
           target="_blank" 
