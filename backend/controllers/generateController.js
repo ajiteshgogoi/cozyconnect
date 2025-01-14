@@ -1,38 +1,44 @@
 const { callGroqApi } = require('../utils/apiClient');
 
-const themes = [// Relationships
-  'trust in relationships', 'vulnerability', 'friendship boundaries', 'family dynamics', 'forgiveness', 'love',
-  // Personal Growth
-  'overcoming fears', 'learning from failure', 'self-discovery', 'habits and routines', 'comfort zones',
-  // Values
-  'personal ethics', 'life priorities', 'defining success', 'meaningful work', 'impact on others',
-  // Experiences
-  'turning points', 'lessons learned', 'proud moments', 'regrets', 'overcoming challenges'
-
+const themes = [
+  // Relationships (simplified and more concrete)
+  'trust', 'friendship', 'family', 'love', 'connection',
+  // Personal Growth (more tangible)
+  'change', 'challenges', 'learning', 'strengths', 'decisions',
+  // Values (clearer)
+  'purpose', 'success', 'beliefs', 'passion', 'helping others',
+  // Life Experiences (more specific)
+  'adventures', 'achievements', 'mistakes', 'surprises', 'transitions'
 ];
-const perspectives = ['childhood', 'present moment', 'future aspirations'];
-const emotionalContexts = ['joy', 'uncertainty', 'hope', 'curiosity', 'gratitude', 'wonder', 'sadness'];
+const perspectives = ['childhood', 'past', 'present moment', 'future aspirations'];
 const questionPatterns = {
   'childhood': [
-    "What childhood memory about {theme} stands out to you?",
-    "How did you first learn about {theme} growing up?",
-    "What early experience shaped your view of {theme}?",
-    "When did you first encounter {theme} in your childhood?",
-    "How did your family approach {theme} when you were young?"
+    "What games did you love playing as a child?",
+    "Who was your favorite person to spend time with growing up?",
+    "What made you really happy as a child?",
+    "What place did you love visiting in your childhood?",
+    "What did you dream about becoming when you were young?"
+  ],
+  'past': [
+    "What's a moment from your past that changed you?",
+    "What's one of your favorite memories?",
+    "What adventure in your life stands out to you?",
+    "What's the best advice someone gave you?",
+    "What skill are you glad you learned?"
   ],
   'present moment': [
-    "How does {theme} show up in your life today?",
-    "What are you currently discovering about {theme}?",
-    "How are you engaging with {theme} in your life right now?",
-    "What recent experience made you think about {theme}?",
-    "How is {theme} influencing your daily life?"
+    "What makes you smile these days?",
+    "What are you excited about right now?",
+    "What's bringing you joy lately?",
+    "What new thing are you learning?",
+    "What do you like most about your life right now?"
   ],
   'future aspirations': [
-    "What goals do you have related to {theme}?",
-    "How would you like to develop your approach to {theme}?",
-    "What changes do you want to make regarding {theme}?",
-    "How do you plan to engage with {theme} differently?",
-    "What impact would you like to have through {theme}?"
+    "What dream would you love to pursue?",
+    "What new skill do you want to learn?",
+    "Where would you love to travel next?",
+    "What positive change do you want to make?",
+    "What adventure would you like to experience?"
   ]
 };
 
@@ -40,7 +46,6 @@ exports.generateQuestion = async (req, res) => {
   try {
     const randomTheme = themes[Math.floor(Math.random() * themes.length)];
     const randomPerspective = perspectives[Math.floor(Math.random() * perspectives.length)];
-    const randomEmotionalContext = emotionalContexts[Math.floor(Math.random() * emotionalContexts.length)];
     
     // Get patterns specific to the perspective
     const perspectivePatterns = questionPatterns[randomPerspective];
@@ -50,34 +55,24 @@ exports.generateQuestion = async (req, res) => {
     const exampleQuestion = randomPattern
       .replace('{theme}', randomTheme);
     
-    const prompt = `Generate a single, thought-provoking question about ${randomTheme} from the perspective of ${randomPerspective}, evoking a sense of ${randomEmotionalContext}. The question should:
-- Be personal but not invasive
-- Encourage storytelling rather than yes/no answers
-- Use simple, conversational language
-- Focus on experiences rather than opinions
-- Avoid potentially traumatic topics
-- Be specific enough to spark a clear memory or thought
-- Start with words like "What", "How", or "When" rather than "Why"
+    const prompt = `Generate a single, natural conversation starter about ${randomTheme} from the perspective of ${randomPerspective}. The question should:
 
-STRICT TIME RULES:
-- For childhood perspective: ONLY ask about past experiences and memories (e.g., "What childhood memory...")
-- For present moment: ONLY ask about current situations happening right now (e.g., "How are you currently...")
-- For future aspirations: ONLY use present tense about hopes and plans (e.g., "What goals do you have..." or "How do you plan to..."). 
-  NEVER use phrases like:
-  - "what will be..."
-  - "when will you..."
-  - "looking back from the future..."
-  - "what future moment..."
-  - Any construction that assumes knowledge of future events
+MUST FOLLOW:
+- Sound like something a friend would naturally ask
+- Be simple and clear (under 12 words)
+- Ask about ONE specific thing
+- Be easy to understand immediately
+- Focus on positive or neutral topics
+- Encourage sharing a story or experience
 
-STRICT GRAMMAR RULES:
-- Keep the question under 15 words
-- Ask about ONE thing only - no compound questions
-- Use simple, everyday language
-- Avoid complex clauses or nested thoughts
-- Be direct and clear
+AVOID:
+- Abstract or philosophical questions
+- Questions about hardships, comfort, vulnerability
+- Anything that sounds therapeutic or clinical
+- Complex emotional terms
+- Multiple questions or 'and/or' combinations
 
-Here's an example pattern for this specific perspective:
+Here's an example of a good, natural question:
 ${exampleQuestion}
 
 Only respond with the question itself. No additional text.`;
