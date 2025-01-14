@@ -77,19 +77,45 @@ ${exampleQuestion}
 Only respond with the question itself. No additional text.`;
     
     let questionText;
-    try {
-      const response = await callGroqApi(prompt);
-      console.log('Full Groq API response:', JSON.stringify(response, null, 2));
-      questionText = response;
-    } catch (apiError) {
-      console.error('Groq API error:', apiError.message);
+    let retries = 3;
+    let lastError;
+    
+    while (retries > 0) {
+      try {
+        // Set timeout for API call
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('API request timed out')), 8000)
+        );
+        
+        const response = await Promise.race([
+          callGroqApi(prompt),
+          timeoutPromise
+        ]);
+        
+        console.log('Full Groq API response:', JSON.stringify(response, null, 2));
+        questionText = response;
+        break;
+      } catch (apiError) {
+        lastError = apiError;
+        console.error(`Groq API attempt ${4 - retries} failed:`, apiError.message);
+        retries--;
+        
+        if (retries > 0) {
+          // Add delay between retries
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+      }
+    }
+    
+    if (!questionText) {
+      console.error('All API attempts failed, using fallback');
       // Fallback to local question generation if API fails
       const randomTheme = themes[Math.floor(Math.random() * themes.length)];
       const randomPerspective = perspectives[Math.floor(Math.random() * perspectives.length)];
-      const randomPattern = questionPatterns[Math.floor(Math.random() * questionPatterns.length)];
-      questionText = randomPattern
-        .replace('{perspective}', randomPerspective)
-        .replace('{theme}', randomTheme);
+      const randomPattern = questionPatterns[randomPerspective][
+        Math.floor(Math.random() * questionPatterns[randomPerspective].length)
+      ];
+      questionText = randomPattern;
     }
     
     res.status(200).json({ question: questionText });
