@@ -28,11 +28,11 @@ const questionPatterns = {
     "How is {theme} influencing your daily life?"
   ],
   'future aspirations': [
-    "What do you hope to achieve with {theme}?",
-    "How do you want to approach {theme} going forward?",
     "What goals do you have related to {theme}?",
-    "How do you want to develop {theme} in your life?",
-    "What changes would you like to make regarding {theme}?"
+    "How would you like to develop your approach to {theme}?",
+    "What changes do you want to make regarding {theme}?",
+    "How do you plan to engage with {theme} differently?",
+    "What impact would you like to have through {theme}?"
   ]
 };
 
@@ -59,11 +59,16 @@ exports.generateQuestion = async (req, res) => {
 - Be specific enough to spark a clear memory or thought
 - Start with words like "What", "How", or "When" rather than "Why"
 
-IMPORTANT TIME RULES:
-- For childhood perspective: ONLY ask about past experiences and memories
-- For present moment: ONLY ask about current situations happening right now
-- For future aspirations: ONLY ask about hopes, plans, and goals. NEVER ask about looking back from the future
-- NEVER mix time perspectives (e.g., no looking back from the future or remembering future events)
+STRICT TIME RULES:
+- For childhood perspective: ONLY ask about past experiences and memories (e.g., "What childhood memory...")
+- For present moment: ONLY ask about current situations happening right now (e.g., "How are you currently...")
+- For future aspirations: ONLY use present tense about hopes and plans (e.g., "What goals do you have..." or "How do you plan to..."). 
+  NEVER use phrases like:
+  - "what will be..."
+  - "when will you..."
+  - "looking back from the future..."
+  - "what future moment..."
+  - Any construction that assumes knowledge of future events
 
 Here's an example pattern for this specific perspective:
 ${exampleQuestion}
