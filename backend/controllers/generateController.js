@@ -108,7 +108,6 @@ Only respond with the question itself. No additional text.`;
     
     while (retries > 0) {
       try {
-        // Set timeout for API call
         const timeoutPromise = new Promise((_, reject) => 
           setTimeout(() => reject(new Error('API request timed out')), 8000)
         );
@@ -127,7 +126,6 @@ Only respond with the question itself. No additional text.`;
         retries--;
         
         if (retries > 0) {
-          // Add delay between retries
           await new Promise(resolve => setTimeout(resolve, 1000));
         }
       }
@@ -135,16 +133,20 @@ Only respond with the question itself. No additional text.`;
     
     if (!questionText) {
       console.error('All API attempts failed, using fallback');
-      // Fallback to local question generation if API fails
-      const randomTheme = themes[Math.floor(Math.random() * themes.length)];
-      const randomPerspective = perspectives[Math.floor(Math.random() * perspectives.length)];
-      const randomPattern = questionPatterns[randomPerspective][
-        Math.floor(Math.random() * questionPatterns[randomPerspective].length)
-      ];
-      questionText = randomPattern;
+      // Enhanced fallback mechanism
+      const fallbackThemes = getRandomElements(themes, Math.random() < 0.3 ? 2 : 1);
+      const fallbackPerspective = perspectives[Math.floor(Math.random() * perspectives.length)];
+      const fallbackPatterns = shuffleArray([...questionPatterns[fallbackPerspective]]);
+      questionText = fallbackPatterns[0];
     }
     
-    res.status(200).json({ question: questionText });
+    res.status(200).json({ 
+      question: questionText,
+      metadata: {
+        themes: selectedThemes,
+        perspective: randomPerspective
+      }
+    });
   } catch (error) {
     console.error('Error generating question:', error.message);
     console.error('Request headers:', req.headers);
