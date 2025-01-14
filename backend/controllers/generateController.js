@@ -83,7 +83,11 @@ MUST FOLLOW:
 - Sound like something a friend would naturally ask
 - Be simple and clear (under 15 words)
 - Ask about ONE specific thing
-- Use correct grammar
+- Use correct grammar, paying special attention to:
+  * Proper use of "used to" (e.g., "What did you used to believe?" is incorrect)
+  * Subject-verb agreement
+  * Proper tense consistency
+  * Correct preposition usage
 - Use British English spelling rules
 - Be easy to understand immediately
 - Encourage sharing a story or experience
@@ -96,6 +100,8 @@ AVOID:
 - Anything that sounds therapeutic or clinical
 - Complex emotional terms
 - Multiple questions or compound questions
+- Common grammar mistakes with "used to" constructions
+- Incorrect verb tenses or agreement
 
 Here's an example of a good, natural question:
 ${basePattern}
