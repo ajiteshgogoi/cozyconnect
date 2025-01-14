@@ -7,7 +7,7 @@ const themes = [// Relationships
   // Values
   'personal ethics', 'life priorities', 'defining success', 'meaningful work', 'impact on others',
   // Experiences
-  'turning points', 'lessons learned', 'proud moments', 'regrets', 'defining challenges'
+  'turning points', 'lessons learned', 'proud moments', 'regrets', 'overcoming challenges'
 
 ];
 const perspectives = ['childhood', 'present moment', 'future aspirations'];

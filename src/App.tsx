@@ -102,7 +102,7 @@ const App: React.FC = () => {
               <p className={`text-l font-medium text-gray-600 transition-opacity duration-200 ${
                 isAnimating ? 'opacity-0' : 'opacity-100'
               }`}>
-                {isFirstQuestion ? "Click 'Generate a Question' to get your prompt..." : question}
+                {isFirstQuestion ? "Click 'Generate a Question' to get a prompt..." : question}
               </p>
             )}
           </div>
