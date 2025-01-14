@@ -1,15 +1,31 @@
 const { callGroqApi } = require('../utils/apiClient');
 
-const themes = [
-  // Relationships (simplified and more concrete)
-  'trust', 'friendship', 'family', 'love', 'connection',
-  // Personal Growth (more tangible)
-  'change', 'challenges', 'learning', 'strengths', 'decisions',
-  // Values (clearer)
-  'purpose', 'success', 'beliefs', 'passion', 'helping others', 'motivation',
-  // Life Experiences (more specific)
-  'adventures', 'achievements', 'mistakes', 'surprises', 'transition', 'celebration'
-];
+// Restructured themes with refined groupings
+const themeGroups = {
+  relationships: {
+    themes: ['trust', 'friendship', 'family', 'love', 'connection'],
+    compatibleWith: ['personal_growth', 'life_experiences']
+  },
+  personal_growth: {
+    themes: ['change', 'challenges', 'learning', 'strengths', 'decisions'],
+    compatibleWith: ['relationships', 'values', 'life_experiences']
+  },
+  values: {
+    themes: ['purpose', 'success', 'beliefs', 'passion', 'helping others', 'motivation', 'faith'],
+    compatibleWith: ['personal_growth', 'life_experiences']
+  },
+  life_experiences: {
+    themes: ['adventures', 'accomplishments', 'lessons', 'milestones', 'transitions'],
+    compatibleWith: ['relationships', 'personal_growth', 'values']
+  }
+};
+
+// Refined time-specific themes
+const timeSensitiveThemes = {
+  future: ['aspirations', 'goals', 'dreams', 'plans'],
+  past: ['memories', 'experiences', 'moments'],
+  present: ['current challenges', 'ongoing projects', 'daily life']
+};
 
 const perspectives = ['childhood', 'past', 'present moment', 'future aspirations'];
 
@@ -22,7 +38,7 @@ const questionPatterns = {
     "What did you dream about becoming when you were young?"
   ],
   'past': [
-    "What's a moment from your past that changed you?",
+    "What moment from your past changed you the most?",
     "What's one of your favorite memories?",
     "What's the most adventurous thing you've done?",
     "What's the best advice someone gave you?",
@@ -53,30 +69,89 @@ function shuffleArray(array) {
   return array;
 }
 
-// Helper function to get random elements
-function getRandomElements(array, count = 2) {
-  return shuffleArray([...array]).slice(0, count);
+// Helper function to check theme similarity
+function areThemesSimilar(theme1, theme2) {
+  const similarPairs = [
+    ['accomplishments', 'achievements'],
+    ['milestones', 'achievements'],
+    ['lessons', 'experiences'],
+    ['plans', 'goals'],
+    ['dreams', 'aspirations']
+  ];
+  
+  return similarPairs.some(pair => 
+    (pair.includes(theme1) && pair.includes(theme2))
+  );
+}
+
+// Helper function to get appropriate time-based theme
+function getTimeBasedTheme(perspective) {
+  switch(perspective) {
+    case 'future aspirations':
+      return timeSensitiveThemes.future[Math.floor(Math.random() * timeSensitiveThemes.future.length)];
+    case 'past':
+    case 'childhood':
+      return timeSensitiveThemes.past[Math.floor(Math.random() * timeSensitiveThemes.past.length)];
+    case 'present moment':
+      return timeSensitiveThemes.present[Math.floor(Math.random() * timeSensitiveThemes.present.length)];
+    default:
+      return null;
+  }
+}
+
+// Refined theme selection logic
+function getCompatibleThemes(perspective) {
+  // Base probability for different theme types
+  const useTimeBased = Math.random() < 0.2;
+  const useMultipleThemes = Math.random() < 0.2;
+  
+  if (useTimeBased) {
+    const timeTheme = getTimeBasedTheme(perspective);
+    if (timeTheme) {
+      return [timeTheme];
+    }
+  }
+  
+  // Get random group
+  const groupKeys = Object.keys(themeGroups);
+  const primaryGroupKey = groupKeys[Math.floor(Math.random() * groupKeys.length)];
+  const primaryGroup = themeGroups[primaryGroupKey];
+  
+  // Get random theme from primary group
+  const primaryTheme = primaryGroup.themes[Math.floor(Math.random() * primaryGroup.themes.length)];
+  
+  if (useMultipleThemes && primaryGroup.compatibleWith.length > 0) {
+    const compatibleGroupKey = primaryGroup.compatibleWith[
+      Math.floor(Math.random() * primaryGroup.compatibleWith.length)
+    ];
+    const compatibleGroup = themeGroups[compatibleGroupKey];
+    const secondaryTheme = compatibleGroup.themes[
+      Math.floor(Math.random() * compatibleGroup.themes.length)
+    ];
+    
+    // Ensure themes aren't too similar
+    if (!areThemesSimilar(primaryTheme, secondaryTheme)) {
+      return [primaryTheme, secondaryTheme];
+    }
+  }
+  
+  return [primaryTheme];
 }
 
 exports.generateQuestion = async (req, res) => {
   try {
-    // Get 1-2 random themes to combine
-    const selectedThemes = getRandomElements(themes, Math.random() < 0.3 ? 2 : 1);
-    const themePhrase = selectedThemes.join(' and ');
-    
-    // Get a random perspective
+    // Get random perspective first
     const randomPerspective = perspectives[Math.floor(Math.random() * perspectives.length)];
+    
+    // Get theme(s) based on perspective
+    const selectedThemes = getCompatibleThemes(randomPerspective);
+    const themePhrase = selectedThemes.join(' and ');
     
     // Get patterns specific to the perspective
     const perspectivePatterns = questionPatterns[randomPerspective];
-    
-    // Shuffle all patterns and take two to potentially combine or modify
     const shuffledPatterns = shuffleArray([...perspectivePatterns]);
     const basePattern = shuffledPatterns[0];
-    
-    // Sometimes combine elements from two patterns (30% chance)
-    const shouldCombinePatterns = Math.random() < 0.3;
-    
+
     const prompt = `Generate a single, natural conversation starter about ${themePhrase} from the perspective of ${randomPerspective}. The question should:
 
 MUST FOLLOW:
@@ -90,17 +165,17 @@ MUST FOLLOW:
   * Correct preposition usage
 - Use British English spelling rules
 - Be easy to understand immediately
-- Encourage sharing a story or experience
-${shouldCombinePatterns ? `- Consider combining elements from these examples:
-  1. ${shuffledPatterns[0]}
-  2. ${shuffledPatterns[1]}` : ''}
+- Ensure the connection between themes feels natural and logical
+- Focus on concrete, specific experiences rather than abstract concepts
+${selectedThemes.length > 1 ? '- Make sure both themes are relevant to the question' : ''}
 
 AVOID:
 - Abstract or philosophical questions
 - Anything that sounds therapeutic or clinical
-- Complex emotional terms
 - Multiple questions or compound questions
-- Common grammar mistakes with "used to" constructions
+- Forced connections between unrelated concepts
+- Questions about planning future surprises
+- Questions that combine incompatible time periods
 - Incorrect verb tenses or agreement
 
 Here's an example of a good, natural question:
@@ -110,7 +185,6 @@ Only respond with the question itself. No additional text.`;
     
     let questionText;
     let retries = 3;
-    let lastError;
     
     while (retries > 0) {
       try {
@@ -127,7 +201,6 @@ Only respond with the question itself. No additional text.`;
         questionText = response;
         break;
       } catch (apiError) {
-        lastError = apiError;
         console.error(`Groq API attempt ${4 - retries} failed:`, apiError.message);
         retries--;
         
@@ -139,10 +212,7 @@ Only respond with the question itself. No additional text.`;
     
     if (!questionText) {
       console.error('All API attempts failed, using fallback');
-      // Enhanced fallback mechanism
-      const fallbackThemes = getRandomElements(themes, Math.random() < 0.3 ? 2 : 1);
-      const fallbackPerspective = perspectives[Math.floor(Math.random() * perspectives.length)];
-      const fallbackPatterns = shuffleArray([...questionPatterns[fallbackPerspective]]);
+      const fallbackPatterns = shuffleArray([...questionPatterns[randomPerspective]]);
       questionText = fallbackPatterns[0];
     }
     
