@@ -44,20 +44,20 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen flex flex-col items-center justify-center p-4">
+    <div className="bg-gray-50 min-h-screen flex flex-col items-center justify-center p-4">
       <header className="text-center mb-12">
-        <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">Easy Connect</h1>
-        <p className="text-2xl text-gray-600 mt-4">Conversation prompts to help you build deeper connections.</p>
+        <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500 pb-2 leading-tight">Easy Connect</h1>
+        <p className="text-xl text-gray-600 mt-4">❤️ Conversation prompts to help you build deeper connections.</p>
       </header>
       <div className="flex flex-col items-center space-y-10 w-full max-w-2xl">
-        <div className="bg-white p-8 rounded-lg shadow-xl w-full text-gray-800 text-center min-h-[160px] flex items-center justify-center relative overflow-hidden mb-6">
-          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 blur-sm opacity-30"></div>
-          <div className="absolute inset-[2px] rounded-lg bg-white"></div>
+        <div className="bg-gray-50 p-8 rounded-lg shadow-xl w-full text-gray-800 text-center min-h-[160px] flex items-center justify-center relative overflow-hidden mb-6">
+          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 blur opacity-25"></div>
+          <div className="absolute inset-[2px] rounded-lg bg-gray-50"></div>
           <div className="relative z-10">
-            <p className={`text-xl font-medium transition-opacity duration-200 ${
+            <p className={`text-xl font-medium text-gray-600 transition-opacity duration-200 ${
               isAnimating ? 'opacity-0' : 'opacity-100'
             }`}>
-              {isFirstQuestion ? "Click 'Generate a Question' to get started..." : question}
+              {isFirstQuestion ? "Click 'Generate a Question' to get your prompt..." : question}
             </p>
           </div>
         </div>
