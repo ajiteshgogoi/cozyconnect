@@ -10,36 +10,44 @@ const themes = [// Relationships
   'turning points', 'lessons learned', 'proud moments', 'regrets', 'defining challenges'
 
 ];
-const perspectives = ['childhood', 'past', 'present', 'future'];
+const perspectives = ['childhood', 'present moment', 'future aspirations'];
 const emotionalContexts = ['joy', 'uncertainty', 'hope', 'curiosity', 'gratitude', 'wonder', 'sadness'];
-const questionPatterns = [
-  "What moment in {perspective} taught you the most about {theme}?",
-  "How has your understanding of {theme} evolved since {perspective}?",
-  "When did you first realize the importance of {theme} in your {perspective}?",
-  "What experience from your {perspective} shaped your view of {theme}?",
-  "How does {theme} influence your {perspective}?",
-  "What story about {theme} from your {perspective} would you share?",
-  // Childhood patterns (past-focused)
-  "What childhood experience first taught you about {theme}?",
-  "How did your early experiences with {theme} shape who you are today?",  
-  // Present patterns (current-focused)
-  "How is {theme} playing a role in your life right now?",
-  "What are you currently learning about {theme}?",  
-  // Future patterns (forward-looking)
-  "How do you hope to develop {theme} in your future?",
-  "What goals do you have related to {theme}?"
-];
+const questionPatterns = {
+  'childhood': [
+    "What childhood memory about {theme} stands out to you?",
+    "How did you first learn about {theme} growing up?",
+    "What early experience shaped your view of {theme}?",
+    "When did you first encounter {theme} in your childhood?",
+    "How did your family approach {theme} when you were young?"
+  ],
+  'present moment': [
+    "How does {theme} show up in your life today?",
+    "What are you currently discovering about {theme}?",
+    "How are you engaging with {theme} in your life right now?",
+    "What recent experience made you think about {theme}?",
+    "How is {theme} influencing your daily life?"
+  ],
+  'future aspirations': [
+    "What do you hope to achieve with {theme}?",
+    "How do you want to approach {theme} going forward?",
+    "What goals do you have related to {theme}?",
+    "How do you want to develop {theme} in your life?",
+    "What changes would you like to make regarding {theme}?"
+  ]
+};
 
 exports.generateQuestion = async (req, res) => {
   try {
     const randomTheme = themes[Math.floor(Math.random() * themes.length)];
     const randomPerspective = perspectives[Math.floor(Math.random() * perspectives.length)];
     const randomEmotionalContext = emotionalContexts[Math.floor(Math.random() * emotionalContexts.length)];
-    const randomPattern = questionPatterns[Math.floor(Math.random() * questionPatterns.length)];
+    
+    // Get patterns specific to the perspective
+    const perspectivePatterns = questionPatterns[randomPerspective];
+    const randomPattern = perspectivePatterns[Math.floor(Math.random() * perspectivePatterns.length)];
 
     // Create example questions based on the pattern
     const exampleQuestion = randomPattern
-      .replace('{perspective}', randomPerspective)
       .replace('{theme}', randomTheme);
     
     const prompt = `Generate a single, thought-provoking question about ${randomTheme} from the perspective of ${randomPerspective}, evoking a sense of ${randomEmotionalContext}. The question should:
@@ -50,19 +58,16 @@ exports.generateQuestion = async (req, res) => {
 - Avoid potentially traumatic topics
 - Be specific enough to spark a clear memory or thought
 - Start with words like "What", "How", or "When" rather than "Why"
-- For 'childhood' and 'past' perspectives: focus on past memories and experiences
-- For 'present' perspective: focus on current situations and ongoing experiences
-- For 'future' perspective: use forward-looking language about hopes and plans, not looking back from the future
 
-Examples of good temporal alignment:
-- Childhood: "What childhood memory taught you the most about trust?"
-- Present: "How are you currently approaching personal growth in your life?"
-- Future: "What kind of impact do you hope to have on others in the coming years?"
+IMPORTANT TIME RULES:
+- For childhood perspective: ONLY ask about past experiences and memories
+- For present moment: ONLY ask about current situations happening right now
+- For future aspirations: ONLY ask about hopes, plans, and goals. NEVER ask about looking back from the future
+- NEVER mix time perspectives (e.g., no looking back from the future or remembering future events)
 
-Here's an example pattern you can use as inspiration, but generate a different question which may or may not follow the pattern:
+Here's an example pattern for this specific perspective:
 ${exampleQuestion}
 
-Always use correct grammar and recheck for grammatical errors.
 Only respond with the question itself. No additional text.`;
     
     let questionText;

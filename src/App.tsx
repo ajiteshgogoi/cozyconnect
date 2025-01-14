@@ -74,7 +74,7 @@ const App: React.FC = () => {
       <div className="mt-5">
         <button
           onClick={generateQuestion}
-          className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-12"
+          className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-4 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-12 text-lg"
         >
           Generate a Question
         </button>
@@ -92,7 +92,7 @@ const App: React.FC = () => {
           href="https://ko-fi.com/gogoi" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="inline-flex items-center bg-gray-700 text-white font-medium py-1.5 px-3 rounded-full transition duration-200 ease-in-out hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          className="inline-flex items-center bg-gray-700 text-white font-medium py-1.5 px-3 rounded-lg transition duration-200 ease-in-out hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
         >
           <img 
             src="https://storage.ko-fi.com/cdn/cup-border.png" 
