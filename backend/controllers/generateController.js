@@ -47,14 +47,30 @@ ${exampleQuestion}
 
 Only respond with the question itself. No additional text.`;
     
-    const response = await callGroqApi(prompt);
-    console.log('Full Groq API response:', JSON.stringify(response, null, 2));
+    let questionText;
+    try {
+      const response = await callGroqApi(prompt);
+      console.log('Full Groq API response:', JSON.stringify(response, null, 2));
+      questionText = response;
+    } catch (apiError) {
+      console.error('Groq API error:', apiError.message);
+      // Fallback to local question generation if API fails
+      const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+      const randomPerspective = perspectives[Math.floor(Math.random() * perspectives.length)];
+      const randomPattern = questionPatterns[Math.floor(Math.random() * questionPatterns.length)];
+      questionText = randomPattern
+        .replace('{perspective}', randomPerspective)
+        .replace('{theme}', randomTheme);
+    }
     
-    // Groq response is a string, no need for complex parsing
-    const questionText = response;
     res.status(200).json({ question: questionText });
   } catch (error) {
     console.error('Error generating question:', error.message);
-    res.status(500).json({ error: 'Failed to generate a question. Please try again.' });
+    console.error('Request headers:', req.headers);
+    console.error('Request body:', req.body);
+    res.status(500).json({ 
+      error: 'Failed to generate a question. Please try again.',
+      details: error.message 
+    });
   }
 };

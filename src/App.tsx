@@ -21,11 +21,20 @@ const App: React.FC = () => {
         ? 'https://easyconnect-red.vercel.app/api/generate'
         : 'http://localhost:5000/api/generate';
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      
       const response = await fetch(apiUrl, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
+        credentials: 'include',
+        mode: 'cors',
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(`API Error: ${response.status} - ${errorData.message || 'Unknown error'}`);

@@ -8,10 +8,12 @@ const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: [
-    'http://localhost:3001',
-    'https://easyconnect-red.vercel.app'
-  ]
+  origin: process.env.NODE_ENV === 'production' 
+    ? 'https://easyconnect-red.vercel.app'
+    : '*',
+  credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 
