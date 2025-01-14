@@ -20,8 +20,8 @@ Cozy Connect is an AI-powered conversation prompt generator designed to foster m
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/ajiteshgogoi/easyconnect
-cd easyconnect
+git clone https://github.com/ajiteshgogoi/cozyconnect.git
+cd cozyconnect
 ```
 
 2. Install dependencies:
