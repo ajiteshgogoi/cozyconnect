@@ -84,22 +84,25 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen flex flex-col items-center justify-center p-4">
+    <div className="bg-orange-50 min-h-screen flex flex-col items-center justify-center p-4">
       <header className="text-center mb-12">
-        <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500 pb-2 leading-tight">Easy Connect</h1>
-        <p className="text-xl text-gray-600 mt-4">❤️ Conversation prompts to help you create deeper connections.</p>
+        <h1 className="text-6xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-500 pb-2 leading-tight drop-shadow-[0_2px_4px_rgba(255,192,203,0.3)]">
+          <span className="mr-3">❤️</span>
+          Easy Connect
+        </h1>
+        <p className="text-xl text-orange-800/80 mt-4">❤️ Conversation prompts to help you create deeper connections.</p>
       </header>
       <div className="flex flex-col items-center space-y-10 w-full max-w-2xl">
-        <div className="bg-gray-50 p-8 rounded-lg shadow-xl w-full text-gray-800 text-center min-h-[160px] flex items-center justify-center relative overflow-hidden mb-6">
-          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 blur opacity-25"></div>
-          <div className="absolute inset-[2px] rounded-lg bg-gray-50"></div>
+        <div className="bg-orange-50 p-8 rounded-lg shadow-xl w-full text-orange-900 text-center min-h-[160px] flex items-center justify-center relative overflow-hidden mb-6">
+          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-orange-200 to-pink-200 blur opacity-40"></div>
+          <div className="absolute inset-[2px] rounded-lg bg-orange-50"></div>
           <div className="relative z-10">
             {loading ? (
-              <p className="text-gray-600 animate-pulse">Generating question...</p>
+              <p className="text-orange-700/80 animate-pulse">Generating question...</p>
             ) : error ? (
               <p className="text-red-500">{error}</p>
             ) : (
-              <p className={`text-l font-medium text-gray-600 transition-opacity duration-200 ${
+              <p className={`text-l font-medium text-orange-900/90 transition-opacity duration-200 ${
                 isAnimating ? 'opacity-0' : 'opacity-100'
               }`}>
                 {isFirstQuestion ? "Click 'Generate a Question' to get a prompt..." : question}
@@ -111,7 +114,7 @@ const App: React.FC = () => {
       <div className="mt-5">
         <button
           onClick={generateQuestion}
-          className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-4 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-12 text-lg"
+          className="bg-gradient-to-r from-orange-400 to-pink-500 text-white font-bold py-4 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-300 mb-12 text-lg hover:shadow-lg hover:shadow-orange-200/50"
         >
           Generate a Question
         </button>
