@@ -1,46 +1,94 @@
-# Getting Started with Create React App
+# Easy Connect - Conversation Prompts
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Easy Connect is an AI-powered conversation prompt generator designed to foster meaningful connections through thoughtful dialogue. By generating context-aware, open-ended questions, it helps break the ice and deepen conversations naturally.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Dynamic Question Generation**: Leverages AI to create unique, thought-provoking questions
+- **Multi-dimensional Context**: Combines themes, perspectives, and emotional contexts for well-rounded prompts
+- **Conversation-Friendly Format**: Questions are designed to encourage storytelling and sharing
+- **Safe and Inclusive**: Built-in guidelines to avoid sensitive topics while maintaining depth
 
-### `npm start`
+## Core Components
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Themes**: Covers various life aspects including relationships, personal growth, values, and experiences
+- **Perspectives**: Temporal viewpoints (childhood, present moment, future aspirations)
+- **Emotional Contexts**: Different emotional tones to add depth to conversations
+- **Question Patterns**: Template-based structure ensuring consistent quality
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Installation
 
-### `npm test`
+1. Clone the repository:
+```bash
+git clone https://github.com/ajiteshgogoi/easyconnect
+cd easyconnect
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Install dependencies:
+```bash
+npm install
+```
 
-### `npm run build`
+3. Set up your environment variables:
+```bash
+cp .env.example .env
+# Add your LLM API credentials to .env
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Usage
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### API Endpoint
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```javascript
+POST /api/generate-question
 
-### `npm run eject`
+// Response
+{
+  "question": "What childhood experience shaped your understanding of trust in relationships?"
+}
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Example Integration
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```javascript
+const response = await fetch('/api/generate-question', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+const data = await response.json();
+console.log(data.question);
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Configuration
 
-## Learn More
+You can customize the question generation by modifying:
+- `themes` array: Add or modify conversation topics
+- `perspectives` array: Adjust temporal viewpoints
+- `emotionalContexts` array: Add different emotional tones
+- `questionPatterns` array: Add new question templates
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Contributing
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Thanks to Llama 3.3 for powering our question generation
+- Inspired by the need for deeper, more meaningful conversations in our digital age
+
+## Support
+
+For support, please open an issue in the repository or contact us at ajiteshgogoi@gmail.com
