@@ -71,12 +71,14 @@ const App: React.FC = () => {
           </div>
         </div>
       </div>
-      <button
-        onClick={generateQuestion}
-        className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-12"
-      >
-        Generate a Question
-      </button>
+      <div className="mt-5">
+        <button
+          onClick={generateQuestion}
+          className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-12"
+        >
+          Generate a Question
+        </button>
+      </div>
       <div className="h-8 mb-8">
         {loading && (
           <p className="text-gray-600 animate-pulse">Generating question...</p>
