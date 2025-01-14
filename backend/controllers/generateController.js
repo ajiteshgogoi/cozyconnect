@@ -71,7 +71,7 @@ AVOID:
 - Complex emotional terms
 - Multiple questions or compound questions
 
-Here's an example of a good, natural question:
+Here's an example of a good, natural question.:
 ${exampleQuestion}
 
 Only respond with the question itself. No additional text.`;
