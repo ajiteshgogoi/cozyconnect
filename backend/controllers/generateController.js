@@ -1,7 +1,7 @@
 const { callGroqApi } = require('../utils/apiClient');
 
 const themes = [// Relationships
-  'trust in relationships', 'vulnerability', 'friendship boundaries', 'family dynamics', 'forgiveness',
+  'trust in relationships', 'vulnerability', 'friendship boundaries', 'family dynamics', 'forgiveness', 'love',
   // Personal Growth
   'overcoming fears', 'learning from failure', 'self-discovery', 'habits and routines', 'comfort zones',
   // Values
@@ -10,8 +10,8 @@ const themes = [// Relationships
   'turning points', 'lessons learned', 'proud moments', 'regrets', 'defining challenges'
 
 ];
-const perspectives = ['childhood', 'present', 'future'];
-const emotionalContexts = ['joy', 'uncertainty', 'hope', 'curiosity', 'gratitude', 'wonder'];
+const perspectives = ['childhood', 'past', 'present', 'future'];
+const emotionalContexts = ['joy', 'uncertainty', 'hope', 'curiosity', 'gratitude', 'wonder', 'sadness'];
 const questionPatterns = [
   "What moment in {perspective} taught you the most about {theme}?",
   "How has your understanding of {theme} evolved since {perspective}?",
@@ -40,6 +40,7 @@ exports.generateQuestion = async (req, res) => {
 - Focus on experiences rather than opinions
 - Avoid potentially traumatic topics
 - Be specific enough to spark a clear memory or thought
+- Prefer British spelling norms. eg. 'realise' instead of 'realize'
 - Start with words like "What", "How", or "When" rather than "Why"
 - Make questions concise, ask only one question and avoid stringing together multiple questions connected by 'and'. 
 
