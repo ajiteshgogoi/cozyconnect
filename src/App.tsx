@@ -22,7 +22,8 @@ const App: React.FC = () => {
         },
       });
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorData = await response.json();
+        throw new Error(`API Error: ${response.status} - ${errorData.message || 'Unknown error'}`);
       }
       const data = await response.json();
       console.log('Received question:', data);
