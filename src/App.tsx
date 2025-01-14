@@ -63,7 +63,7 @@ const App: React.FC = () => {
           <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 blur opacity-25"></div>
           <div className="absolute inset-[2px] rounded-lg bg-gray-50"></div>
           <div className="relative z-10">
-            <p className={`text-xl font-medium text-gray-600 transition-opacity duration-200 ${
+            <p className={`text-l font-medium text-gray-600 transition-opacity duration-200 ${
               isAnimating ? 'opacity-0' : 'opacity-100'
             }`}>
               {isFirstQuestion ? "Click 'Generate a Question' to get your prompt..." : question}
@@ -87,14 +87,19 @@ const App: React.FC = () => {
           <p className="text-red-500">{error}</p>
         )}
       </div>
-      <footer className="relative mt-8 w-full text-center">
+      <footer className="relative mt-3 w-full text-center">
         <a 
-          href="https://ajiteshgogoi.com/" 
+          href="https://ko-fi.com/gogoi" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="text-gray-600 hover:text-gray-800 transition-colors"
+          className="inline-flex items-center bg-gray-700 text-white font-medium py-1.5 px-3 rounded-full transition duration-200 ease-in-out hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
         >
-          © ajitesh gogoi
+          <img 
+            src="https://storage.ko-fi.com/cdn/cup-border.png" 
+            alt="Ko-Fi logo" 
+            className="w-4 h-4 mr-1.5"
+          />
+          Buy Me a Coffee
         </a>
       </footer>
     </div>
