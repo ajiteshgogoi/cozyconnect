@@ -1,7 +1,6 @@
 # Cozy Connect - Conversation Prompts
 
-Cozy Connect is an AI-powered conversation starter generator designed to foster natural, engaging conversations through simple, friendly questions. It helps break the ice and deepen connections by generating prompts that feel like questions a good friend would ask.
-
+Cozy Connect is an AI-powered conversation starter generator designed to foster natural, engaging conversations through simple, friendly questions. It helps break the ice and deepen connections by encouraging thoughtful interactions.
 ## Features
 
 - **Natural Questions**: Generates conversational prompts that sound authentic and friendly
@@ -52,7 +51,7 @@ POST /api/generate
 
 // Response
 {
-  "question": "What adventure in your life stands out to you?"
+  "question": "What made you really happy as a child?"
 }
 ```
 
@@ -73,12 +72,11 @@ console.log(data.question);
 ## Question Guidelines
 
 Each generated question follows these principles:
-- Under 12 words long
+- Under 15 words long
 - Focuses on a single, clear topic
 - Uses simple, everyday language
 - Sounds natural and conversational
 - Encourages storytelling and sharing
-- Maintains a positive or neutral tone
 
 ## Configuration
 
@@ -104,8 +102,13 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## Acknowledgments
 
 - Thanks to [LLM Provider] for powering our question generation
-- Inspired by the art of meaningful conversation
+- Inspired by human connection and the art of meaningful conversation
 
-## Support
+## Contact
 
-For support, please open an issue in the repository or contact us at ajiteshgogoi@gmail.com
+For help, please open an issue in the repository or contact us at ajiteshgogoi@gmail.com
+
+## Support Me
+If you enjoy my work and would like to support me, you can buy me a coffee:
+
+[![Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/gogoi)
