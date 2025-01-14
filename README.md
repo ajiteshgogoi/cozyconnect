@@ -1,6 +1,6 @@
-# Easy Connect - Conversation Prompts
+# Cozy Connect - Conversation Prompts
 
-Easy Connect is an AI-powered conversation prompt generator designed to foster meaningful connections through thoughtful dialogue. By generating context-aware, open-ended questions, it helps break the ice and deepen conversations naturally.
+Cozy Connect is an AI-powered conversation prompt generator designed to foster meaningful connections through thoughtful dialogue. By generating context-aware, open-ended questions, it helps break the ice and deepen conversations naturally.
 
 ## Features
 

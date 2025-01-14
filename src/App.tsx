@@ -23,7 +23,7 @@ const App: React.FC = () => {
       }
 
       const apiUrl = process.env.NODE_ENV === 'production'
-        ? 'https://easyconnect-red.vercel.app/api/generate'
+        ? 'https://cozyconnect.vercel.app/api/generate'
         : 'http://localhost:5000/api/generate';
 
       const controller = new AbortController();
@@ -88,7 +88,7 @@ const App: React.FC = () => {
       <header className="text-center mb-12">
         <h1 className="text-6xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-500 pb-2 leading-tight drop-shadow-[0_2px_4px_rgba(255,192,203,0.3)]">
           <span className="mr-3">❤️</span>
-          Easy Connect
+          Cozy Connect
         </h1>
         <div className="bg-orange-900/90 rounded-lg px-6 py-4 mt-4 inline-block">
           <p className="text-xl text-orange-50">Conversation prompts to help you create deeper connections.</p>
