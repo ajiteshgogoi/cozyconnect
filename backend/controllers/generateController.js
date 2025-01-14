@@ -1,14 +1,51 @@
 const { callGroqApi } = require('../utils/apiClient');
 
-const themes = ['relationships', 'personal growth', 'values', 'experiences'];
+const themes = [// Relationships
+  'trust in relationships', 'vulnerability', 'friendship boundaries', 'family dynamics', 'forgiveness',
+  // Personal Growth
+  'overcoming fears', 'learning from failure', 'self-discovery', 'habits and routines', 'comfort zones',
+  // Values
+  'personal ethics', 'life priorities', 'defining success', 'meaningful work', 'impact on others',
+  // Experiences
+  'turning points', 'lessons learned', 'proud moments', 'regrets', 'defining challenges'
+
+];
 const perspectives = ['childhood', 'present moment', 'future aspirations'];
+const emotionalContexts = ['joy', 'uncertainty', 'hope', 'curiosity', 'gratitude', 'wonder'];
+const questionPatterns = [
+  "What moment in {perspective} taught you the most about {theme}?",
+  "How has your understanding of {theme} evolved since {perspective}?",
+  "When did you first realize the importance of {theme} in your {perspective}?",
+  "What experience from your {perspective} shaped your view of {theme}?",
+  "How does {theme} influence your {perspective}?",
+  "What story about {theme} from your {perspective} would you share?"
+];
 
 exports.generateQuestion = async (req, res) => {
   try {
     const randomTheme = themes[Math.floor(Math.random() * themes.length)];
     const randomPerspective = perspectives[Math.floor(Math.random() * perspectives.length)];
+    const randomEmotionalContext = emotionalContexts[Math.floor(Math.random() * emotionalContexts.length)];
+    const randomPattern = questionPatterns[Math.floor(Math.random() * questionPatterns.length)];
+
+    // Create example questions based on the pattern
+    const exampleQuestion = randomPattern
+      .replace('{perspective}', randomPerspective)
+      .replace('{theme}', randomTheme);
     
-    const prompt = `Generate a single, concise open-ended question about ${randomTheme} from the perspective of ${randomPerspective}. Keep the question simple and easy to understand, focusing on one specific idea. Ensure the question is unique, thought-provoking, and contains only one part (no 'and' or multiple questions). Only respond with the question. Don't add any explanations, descriptions or elaboration.`;
+    const prompt = `Generate a single, thought-provoking question about ${randomTheme} from the perspective of ${randomPerspective}, evoking a sense of ${randomEmotionalContext}. The question should:
+- Be personal but not invasive
+- Encourage storytelling rather than yes/no answers
+- Use simple, conversational language
+- Focus on experiences rather than opinions
+- Avoid potentially traumatic topics
+- Be specific enough to spark a clear memory or thought
+- Start with words like "What", "How", or "When" rather than "Why"
+
+Here's an example pattern you can use as inspiration, but feel free to generate a different question:
+${exampleQuestion}
+
+Only respond with the question itself. No additional text.`;
     
     const response = await callGroqApi(prompt);
     console.log('Full Groq API response:', JSON.stringify(response, null, 2));
