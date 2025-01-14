@@ -10,7 +10,7 @@ const themes = [// Relationships
   'turning points', 'lessons learned', 'proud moments', 'regrets', 'defining challenges'
 
 ];
-const perspectives = ['childhood', 'present moment', 'future aspirations'];
+const perspectives = ['childhood', 'present', 'future'];
 const emotionalContexts = ['joy', 'uncertainty', 'hope', 'curiosity', 'gratitude', 'wonder'];
 const questionPatterns = [
   "What moment in {perspective} taught you the most about {theme}?",
@@ -41,6 +41,7 @@ exports.generateQuestion = async (req, res) => {
 - Avoid potentially traumatic topics
 - Be specific enough to spark a clear memory or thought
 - Start with words like "What", "How", or "When" rather than "Why"
+- Make questions concise, ask only one question and avoid stringing together multiple questions connected by 'and'.
 
 Here's an example pattern you can use as inspiration, but feel free to generate a different question:
 ${exampleQuestion}
