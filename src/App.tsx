@@ -12,7 +12,15 @@ const App: React.FC = () => {
     setQuestion(null);
 
     try {
-      const response = await fetch(process.env.REACT_APP_API_URL || 'http://localhost:5000/api/generate');
+      const apiUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://easyconnect-red.vercel.app/api/generate'
+        : 'http://localhost:5000/api/generate';
+        
+      const response = await fetch(apiUrl, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
