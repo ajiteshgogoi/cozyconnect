@@ -7,7 +7,7 @@ const App: React.FC = () => {
   const [isFirstQuestion, setIsFirstQuestion] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const generateQuestion = async () => {
+  const generateQuestionInternal = async (retryCount = 0) => {
     setLoading(true);
     setError(null);
     setIsAnimating(true);
@@ -17,12 +17,19 @@ const App: React.FC = () => {
     setQuestion(null);
 
     try {
+      // Check network connectivity
+      if (!navigator.onLine) {
+        throw new Error('No internet connection. Please check your network and try again.');
+      }
+
       const apiUrl = process.env.NODE_ENV === 'production'
         ? 'https://easyconnect-red.vercel.app/api/generate'
         : 'http://localhost:5000/api/generate';
 
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      // Increase timeout to 10 seconds for mobile
+      const timeoutDuration = window.innerWidth <= 768 ? 10000 : 5000;
+      const timeoutId = setTimeout(() => controller.abort(), timeoutDuration);
       
       const response = await fetch(apiUrl, {
         method: 'GET',
@@ -35,21 +42,45 @@ const App: React.FC = () => {
         signal: controller.signal
       });
       clearTimeout(timeoutId);
+      
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(`API Error: ${response.status} - ${errorData.message || 'Unknown error'}`);
       }
+      
       const data = await response.json();
       console.log('Received question:', data);
       setQuestion(data.question);
       setIsFirstQuestion(false);
     } catch (err) {
       console.error('Error generating question:', err);
-      setError(`Failed to generate question: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      
+      // Retry logic with exponential backoff
+      if (retryCount < 2 && err instanceof Error && err.name !== 'AbortError') {
+        const delay = Math.pow(2, retryCount) * 1000; // Exponential backoff
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return generateQuestionInternal(retryCount + 1);
+      }
+
+      // User-friendly error messages
+      let errorMessage = 'Failed to generate question. Please try again.';
+      if (err instanceof Error) {
+        if (err.name === 'AbortError') {
+          errorMessage = 'Request timed out. Please check your internet connection.';
+        } else if (err.message.includes('No internet connection')) {
+          errorMessage = err.message;
+        }
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsAnimating(false);
       setLoading(false);
     }
+  };
+
+  const generateQuestion: React.MouseEventHandler<HTMLButtonElement> = async () => {
+    await generateQuestionInternal();
   };
 
   return (
