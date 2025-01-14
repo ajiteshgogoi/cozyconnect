@@ -8,7 +8,7 @@ const themes = [
   // Values (clearer)
   'purpose', 'success', 'beliefs', 'passion', 'helping others', 'motivation',
   // Life Experiences (more specific)
-  'adventures', 'achievements', 'mistakes', 'surprises', 'transitions'
+  'adventures', 'achievements', 'mistakes', 'surprises', 'transition', 'celebration'
 ];
 const perspectives = ['childhood', 'past', 'present moment', 'future aspirations'];
 const questionPatterns = {
@@ -52,8 +52,7 @@ exports.generateQuestion = async (req, res) => {
     const randomPattern = perspectivePatterns[Math.floor(Math.random() * perspectivePatterns.length)];
 
     // Create example questions based on the pattern
-    const exampleQuestion = randomPattern
-      .replace('{theme}', randomTheme);
+    const exampleQuestion = randomPattern;
     
     const prompt = `Generate a single, natural conversation starter about ${randomTheme} from the perspective of ${randomPerspective}. The question should:
 
@@ -61,8 +60,9 @@ MUST FOLLOW:
 - Sound like something a friend would naturally ask
 - Be simple and clear (under 15 words)
 - Ask about ONE specific thing
+- Use correct grammar
+- Use British English spelling rules
 - Be easy to understand immediately
-- Focus on positive or neutral topics
 - Encourage sharing a story or experience
 
 AVOID:
