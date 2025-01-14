@@ -7,11 +7,11 @@ const themeGroups = {
     compatibleWith: ['personal_growth', 'life_experiences']
   },
   personal_growth: {
-    themes: ['change', 'challenges', 'learning', 'strengths', 'decisions'],
+    themes: ['change', 'challenges', 'learning', 'strengths', 'decisions', 'hobbies'],
     compatibleWith: ['relationships', 'values', 'life_experiences']
   },
   values: {
-    themes: ['purpose', 'success', 'beliefs', 'passion', 'helping others', 'motivation', 'faith'],
+    themes: ['purpose', 'success', 'beliefs', 'passion', 'helping others', 'motivation'],
     compatibleWith: ['personal_growth', 'life_experiences']
   },
   life_experiences: {
