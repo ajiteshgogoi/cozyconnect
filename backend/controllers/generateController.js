@@ -41,11 +41,12 @@ exports.generateQuestion = async (req, res) => {
 - Avoid potentially traumatic topics
 - Be specific enough to spark a clear memory or thought
 - Start with words like "What", "How", or "When" rather than "Why"
-- Make questions concise, ask only one question and avoid stringing together multiple questions connected by 'and'.
+- Make questions concise, ask only one question and avoid stringing together multiple questions connected by 'and'. 
 
-Here's an example pattern you can use as inspiration, but feel free to generate a different question:
+Here's an example pattern you can use as inspiration, but generate a different question which may or may not follow the pattern:
 ${exampleQuestion}
 
+Always use correct grammar and recheck for grammatical errors.
 Only respond with the question itself. No additional text.`;
     
     let questionText;
