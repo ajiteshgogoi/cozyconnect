@@ -45,12 +45,12 @@ const App: React.FC = () => {
 
   return (
     <div className="bg-white min-h-screen flex flex-col items-center justify-center p-4">
-      <header className="text-center">
+      <header className="text-center mb-12">
         <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">Easy Connect</h1>
-        <p className="text-2xl text-gray-600 mt-2">Question prompts to build deeper connections.</p>
+        <p className="text-2xl text-gray-600 mt-4">Question prompts to build deeper connections.</p>
       </header>
-      <div className="flex flex-col items-center space-y-8 w-full max-w-2xl">
-        <div className="bg-white p-8 rounded-lg shadow-xl w-full text-gray-800 text-center min-h-[160px] flex items-center justify-center relative overflow-hidden">
+      <div className="flex flex-col items-center space-y-10 w-full max-w-2xl">
+        <div className="bg-white p-8 rounded-lg shadow-xl w-full text-gray-800 text-center min-h-[160px] flex items-center justify-center relative overflow-hidden mb-6">
           <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 blur-sm opacity-30"></div>
           <div className="absolute inset-[2px] rounded-lg bg-white"></div>
           <div className="relative z-10">
@@ -61,7 +61,7 @@ const App: React.FC = () => {
             </p>
           </div>
         </div>
-        <div className="h-8">
+        <div className="h-8 mb-8">
           {loading && (
             <p className="text-gray-600 animate-pulse">Generating question...</p>
           )}
@@ -72,7 +72,7 @@ const App: React.FC = () => {
       </div>
       <button
         onClick={generateQuestion}
-        className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mb-12"
       >
         Generate a Question
       </button>
