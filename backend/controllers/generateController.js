@@ -1,6 +1,6 @@
 const { callGroqApi } = require('../utils/apiClient');
 
-// Restructured themes with refined groupings
+// Restructured themes with compatibility groupings
 const themeGroups = {
   relationships: {
     themes: ['trust', 'friendship', 'family', 'love', 'connection'],
@@ -15,15 +15,15 @@ const themeGroups = {
     compatibleWith: ['personal_growth', 'life_experiences']
   },
   life_experiences: {
-    themes: ['adventures', 'accomplishments', 'lessons', 'milestones', 'transitions'],
+    themes: ['adventures', 'achievements', 'transitions'],
     compatibleWith: ['relationships', 'personal_growth', 'values']
   }
 };
 
-// Refined time-specific themes
+// Separate out time-sensitive themes that need special handling
 const timeSensitiveThemes = {
-  future: ['aspirations', 'goals', 'dreams', 'plans'],
-  past: ['memories', 'experiences', 'moments'],
+  future: ['plans', 'hopes', 'dreams'],
+  past: ['memories', 'experiences', 'lessons', 'mistakes'],
   present: ['current challenges', 'ongoing projects', 'daily life']
 };
 
@@ -69,19 +69,29 @@ function shuffleArray(array) {
   return array;
 }
 
-// Helper function to check theme similarity
-function areThemesSimilar(theme1, theme2) {
-  const similarPairs = [
-    ['accomplishments', 'achievements'],
-    ['milestones', 'achievements'],
-    ['lessons', 'experiences'],
-    ['plans', 'goals'],
-    ['dreams', 'aspirations']
-  ];
+// Helper function to get a compatible theme combination
+function getCompatibleThemes() {
+  // Get random group
+  const groupKeys = Object.keys(themeGroups);
+  const primaryGroupKey = groupKeys[Math.floor(Math.random() * groupKeys.length)];
+  const primaryGroup = themeGroups[primaryGroupKey];
   
-  return similarPairs.some(pair => 
-    (pair.includes(theme1) && pair.includes(theme2))
-  );
+  // Get random theme from primary group
+  const primaryTheme = primaryGroup.themes[Math.floor(Math.random() * primaryGroup.themes.length)];
+  
+  // 30% chance to add compatible theme
+  if (Math.random() < 0.3 && primaryGroup.compatibleWith.length > 0) {
+    const compatibleGroupKey = primaryGroup.compatibleWith[
+      Math.floor(Math.random() * primaryGroup.compatibleWith.length)
+    ];
+    const compatibleGroup = themeGroups[compatibleGroupKey];
+    const secondaryTheme = compatibleGroup.themes[
+      Math.floor(Math.random() * compatibleGroup.themes.length)
+    ];
+    return [primaryTheme, secondaryTheme];
+  }
+  
+  return [primaryTheme];
 }
 
 // Helper function to get appropriate time-based theme
@@ -99,52 +109,21 @@ function getTimeBasedTheme(perspective) {
   }
 }
 
-// Refined theme selection logic
-function getCompatibleThemes(perspective) {
-  // Base probability for different theme types
-  const useTimeBased = Math.random() < 0.2;
-  const useMultipleThemes = Math.random() < 0.2;
-  
-  if (useTimeBased) {
-    const timeTheme = getTimeBasedTheme(perspective);
-    if (timeTheme) {
-      return [timeTheme];
-    }
-  }
-  
-  // Get random group
-  const groupKeys = Object.keys(themeGroups);
-  const primaryGroupKey = groupKeys[Math.floor(Math.random() * groupKeys.length)];
-  const primaryGroup = themeGroups[primaryGroupKey];
-  
-  // Get random theme from primary group
-  const primaryTheme = primaryGroup.themes[Math.floor(Math.random() * primaryGroup.themes.length)];
-  
-  if (useMultipleThemes && primaryGroup.compatibleWith.length > 0) {
-    const compatibleGroupKey = primaryGroup.compatibleWith[
-      Math.floor(Math.random() * primaryGroup.compatibleWith.length)
-    ];
-    const compatibleGroup = themeGroups[compatibleGroupKey];
-    const secondaryTheme = compatibleGroup.themes[
-      Math.floor(Math.random() * compatibleGroup.themes.length)
-    ];
-    
-    // Ensure themes aren't too similar
-    if (!areThemesSimilar(primaryTheme, secondaryTheme)) {
-      return [primaryTheme, secondaryTheme];
-    }
-  }
-  
-  return [primaryTheme];
-}
-
 exports.generateQuestion = async (req, res) => {
   try {
     // Get random perspective first
     const randomPerspective = perspectives[Math.floor(Math.random() * perspectives.length)];
     
     // Get theme(s) based on perspective
-    const selectedThemes = getCompatibleThemes(randomPerspective);
+    let selectedThemes;
+    if (Math.random() < 0.3) {
+      // 30% chance to use time-based theme
+      const timeTheme = getTimeBasedTheme(randomPerspective);
+      selectedThemes = timeTheme ? [timeTheme] : getCompatibleThemes();
+    } else {
+      selectedThemes = getCompatibleThemes();
+    }
+    
     const themePhrase = selectedThemes.join(' and ');
     
     // Get patterns specific to the perspective
