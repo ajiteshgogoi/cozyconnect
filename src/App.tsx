@@ -61,14 +61,6 @@ const App: React.FC = () => {
             </p>
           </div>
         </div>
-        <div className="h-8 mb-8">
-          {loading && (
-            <p className="text-gray-600 animate-pulse">Generating question...</p>
-          )}
-          {error && (
-            <p className="text-red-500">{error}</p>
-          )}
-        </div>
       </div>
       <button
         onClick={generateQuestion}
@@ -76,6 +68,14 @@ const App: React.FC = () => {
       >
         Generate a Question
       </button>
+      <div className="h-8 mb-8">
+        {loading && (
+          <p className="text-gray-600 animate-pulse">Generating question...</p>
+        )}
+        {error && (
+          <p className="text-red-500">{error}</p>
+        )}
+      </div>
       <footer className="absolute bottom-4 w-full text-center">
         <a 
           href="https://ajiteshgogoi.com/" 
