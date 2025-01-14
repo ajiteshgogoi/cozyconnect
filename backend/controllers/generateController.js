@@ -10,7 +10,9 @@ const themes = [
   // Life Experiences (more specific)
   'adventures', 'achievements', 'mistakes', 'surprises', 'transition', 'celebration'
 ];
+
 const perspectives = ['childhood', 'past', 'present moment', 'future aspirations'];
+
 const questionPatterns = {
   'childhood': [
     "What games did you love playing as a child?",
@@ -42,19 +44,40 @@ const questionPatterns = {
   ]
 };
 
+// Helper function to shuffle array
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+// Helper function to get random elements
+function getRandomElements(array, count = 2) {
+  return shuffleArray([...array]).slice(0, count);
+}
+
 exports.generateQuestion = async (req, res) => {
   try {
-    const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+    // Get 1-2 random themes to combine
+    const selectedThemes = getRandomElements(themes, Math.random() < 0.3 ? 2 : 1);
+    const themePhrase = selectedThemes.join(' and ');
+    
+    // Get a random perspective
     const randomPerspective = perspectives[Math.floor(Math.random() * perspectives.length)];
     
     // Get patterns specific to the perspective
     const perspectivePatterns = questionPatterns[randomPerspective];
-    const randomPattern = perspectivePatterns[Math.floor(Math.random() * perspectivePatterns.length)];
-
-    // Create example questions based on the pattern
-    const exampleQuestion = randomPattern;
     
-    const prompt = `Generate a single, natural conversation starter about ${randomTheme} from the perspective of ${randomPerspective}. The question should:
+    // Shuffle all patterns and take two to potentially combine or modify
+    const shuffledPatterns = shuffleArray([...perspectivePatterns]);
+    const basePattern = shuffledPatterns[0];
+    
+    // Sometimes combine elements from two patterns (30% chance)
+    const shouldCombinePatterns = Math.random() < 0.3;
+    
+    const prompt = `Generate a single, natural conversation starter about ${themePhrase} from the perspective of ${randomPerspective}. The question should:
 
 MUST FOLLOW:
 - Sound like something a friend would naturally ask
@@ -64,6 +87,9 @@ MUST FOLLOW:
 - Use British English spelling rules
 - Be easy to understand immediately
 - Encourage sharing a story or experience
+${shouldCombinePatterns ? `- Consider combining elements from these examples:
+  1. ${shuffledPatterns[0]}
+  2. ${shuffledPatterns[1]}` : ''}
 
 AVOID:
 - Abstract or philosophical questions
@@ -71,8 +97,8 @@ AVOID:
 - Complex emotional terms
 - Multiple questions or compound questions
 
-Here's an example of a good, natural question.:
-${exampleQuestion}
+Here's an example of a good, natural question:
+${basePattern}
 
 Only respond with the question itself. No additional text.`;
     
