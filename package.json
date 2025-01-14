@@ -2,6 +2,7 @@
   "name": "easyconnect",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:5000",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -10,8 +11,12 @@
     "@types/node": "^16.18.123",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "framer-motion": "^11.17.0",
+    "lucide-react": "^0.471.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-helmet": "^6.1.0",
+    "react-router-dom": "^7.1.1",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
@@ -39,5 +44,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {
+    "ajv": "^7.2.4"
+  },
+  "main": "/index.tsx"
 }
