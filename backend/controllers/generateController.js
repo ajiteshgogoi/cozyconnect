@@ -45,7 +45,6 @@ Must be:
 - Encourage sharing a story, experience, or insight
 Avoid:
 - Trivial or overly simple questions (e.g., "What did you eat today?")
-- Abstract or overly philosophical phrasing
 - Incorrect grammar
 - Questions that are too broad (e.g., "What was your best adventure?")
 Example of a good question:
