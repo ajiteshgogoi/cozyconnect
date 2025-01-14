@@ -84,7 +84,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="bg-orange-50 min-h-screen flex flex-col items-center justify-center p-4">
+    <div className="bg-orange-50 min-h-screen flex flex-col items-center justify-center p-4 bg-[radial-gradient(#f0f0f0_10%,transparent_10%)] bg-[length:20px_20px]">
       <header className="text-center mb-12">
         <h1 className="text-6xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-500 pb-2 leading-tight drop-shadow-[0_2px_4px_rgba(255,192,203,0.3)]">
           <span className="mr-3">❤️</span>
