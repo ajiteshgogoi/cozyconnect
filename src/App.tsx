@@ -91,7 +91,7 @@ const App: React.FC = () => {
           Cozy Connect
         </h1>
         <div className="bg-orange-900/90 rounded-lg px-8 py-4 w-full max-w-2xl">
-          <p className="text-xl text-orange-50">Conversation prompts to help you create deeper connections.</p>
+          <p className="text-l text-orange-50">Conversation prompts to help you create deeper connections.</p>
         </div>
       </header>
       <div className="flex flex-col items-center space-y-10 w-full max-w-2xl">
