@@ -1,20 +1,28 @@
 # Cozy Connect - Conversation Prompts
 
-Cozy Connect is an AI-powered conversation prompt generator designed to foster meaningful connections through thoughtful dialogue. By generating context-aware, open-ended questions, it helps break the ice and deepen conversations naturally.
+Cozy Connect is an AI-powered conversation starter generator designed to foster natural, engaging conversations through simple, friendly questions. It helps break the ice and deepen connections by generating prompts that feel like questions a good friend would ask.
 
 ## Features
 
-- **Dynamic Question Generation**: Leverages AI to create unique, thought-provoking questions
-- **Multi-dimensional Context**: Combines themes, perspectives, and emotional contexts for well-rounded prompts
-- **Conversation-Friendly Format**: Questions are designed to encourage storytelling and sharing
-- **Safe and Inclusive**: Built-in guidelines to avoid sensitive topics while maintaining depth
+- **Natural Questions**: Generates conversational prompts that sound authentic and friendly
+- **Time-Based Perspectives**: Questions span from childhood memories to future aspirations
+- **Simple & Clear**: Each question is concise and easy to understand
+- **Positive Focus**: Emphasizes uplifting and engaging topics
+- **Story-Friendly**: Encourages sharing of experiences and memories
 
-## Core Components
+## Question Categories
 
-- **Themes**: Covers various life aspects including relationships, personal growth, values, and experiences
-- **Perspectives**: Temporal viewpoints (childhood, present moment, future aspirations)
-- **Emotional Contexts**: Different emotional tones to add depth to conversations
-- **Question Patterns**: Template-based structure ensuring consistent quality
+### Themes
+- **Relationships**: Trust, friendship, family, love, connection
+- **Personal Growth**: Change, challenges, learning, strengths, decisions
+- **Values**: Purpose, success, beliefs, passion, helping others
+- **Life Experiences**: Adventures, achievements, mistakes, surprises, transitions
+
+### Time Perspectives
+- **Childhood**: Early years and childhood memories
+- **Past**: Teen years through recent past experiences
+- **Present**: Current situations and ongoing experiences
+- **Future**: Goals, dreams, and aspirations
 
 ## Installation
 
@@ -44,7 +52,7 @@ POST /api/generate
 
 // Response
 {
-  "question": "What childhood experience shaped your understanding of trust in relationships?"
+  "question": "What adventure in your life stands out to you?"
 }
 ```
 
@@ -62,13 +70,22 @@ const data = await response.json();
 console.log(data.question);
 ```
 
+## Question Guidelines
+
+Each generated question follows these principles:
+- Under 12 words long
+- Focuses on a single, clear topic
+- Uses simple, everyday language
+- Sounds natural and conversational
+- Encourages storytelling and sharing
+- Maintains a positive or neutral tone
+
 ## Configuration
 
-You can customize the question generation by modifying:
-- `themes` array: Add or modify conversation topics
-- `perspectives` array: Adjust temporal viewpoints
-- `emotionalContexts` array: Add different emotional tones
-- `questionPatterns` array: Add new question templates
+You can customize the generator by modifying:
+- `themes` array: Adjust conversation topics
+- `perspectives` array: Modify time perspectives
+- `questionPatterns` object: Update question templates for each perspective
 
 ## Contributing
 
@@ -86,8 +103,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-- Thanks to Llama 3.3 for powering our question generation
-- Inspired by the need for deeper, more meaningful conversations in our digital age
+- Thanks to [LLM Provider] for powering our question generation
+- Inspired by the art of meaningful conversation
 
 ## Support
 
