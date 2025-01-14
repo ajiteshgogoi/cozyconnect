@@ -7,7 +7,7 @@ const App: React.FC = () => {
   const [isFirstQuestion, setIsFirstQuestion] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const generateQuestionInternal = async (retryCount = 0) => {
+  const generateQuestionInternal = async (retryCount = 0): Promise<void> => {
     setLoading(true);
     setError(null);
     setIsAnimating(true);
@@ -94,11 +94,17 @@ const App: React.FC = () => {
           <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 blur opacity-25"></div>
           <div className="absolute inset-[2px] rounded-lg bg-gray-50"></div>
           <div className="relative z-10">
-            <p className={`text-l font-medium text-gray-600 transition-opacity duration-200 ${
-              isAnimating ? 'opacity-0' : 'opacity-100'
-            }`}>
-              {isFirstQuestion ? "Click 'Generate a Question' to get your prompt..." : question}
-            </p>
+            {loading ? (
+              <p className="text-gray-600 animate-pulse">Generating question...</p>
+            ) : error ? (
+              <p className="text-red-500">{error}</p>
+            ) : (
+              <p className={`text-l font-medium text-gray-600 transition-opacity duration-200 ${
+                isAnimating ? 'opacity-0' : 'opacity-100'
+              }`}>
+                {isFirstQuestion ? "Click 'Generate a Question' to get your prompt..." : question}
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -110,15 +116,7 @@ const App: React.FC = () => {
           Generate a Question
         </button>
       </div>
-      <div className="h-8 mb-8">
-        {loading && (
-          <p className="text-gray-600 animate-pulse">Generating question...</p>
-        )}
-        {error && (
-          <p className="text-red-500">{error}</p>
-        )}
-      </div>
-      <footer className="relative mt-3 w-full text-center">
+      <footer className="mt-8 w-full text-center space-y-4">
         <a 
           href="https://ko-fi.com/gogoi" 
           target="_blank" 
@@ -132,6 +130,9 @@ const App: React.FC = () => {
           />
           Buy Me a Coffee
         </a>
+        <div className="text-gray-500 text-sm mt-4">
+          © ajitesh gogoi
+        </div>
       </footer>
     </div>
   );
