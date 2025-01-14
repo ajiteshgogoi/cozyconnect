@@ -18,7 +18,16 @@ const questionPatterns = [
   "When did you first realize the importance of {theme} in your {perspective}?",
   "What experience from your {perspective} shaped your view of {theme}?",
   "How does {theme} influence your {perspective}?",
-  "What story about {theme} from your {perspective} would you share?"
+  "What story about {theme} from your {perspective} would you share?",
+  // Childhood patterns (past-focused)
+  "What childhood experience first taught you about {theme}?",
+  "How did your early experiences with {theme} shape who you are today?",  
+  // Present patterns (current-focused)
+  "How is {theme} playing a role in your life right now?",
+  "What are you currently learning about {theme}?",  
+  // Future patterns (forward-looking)
+  "How do you hope to develop {theme} in your future?",
+  "What goals do you have related to {theme}?"
 ];
 
 exports.generateQuestion = async (req, res) => {
@@ -40,9 +49,15 @@ exports.generateQuestion = async (req, res) => {
 - Focus on experiences rather than opinions
 - Avoid potentially traumatic topics
 - Be specific enough to spark a clear memory or thought
-- Prefer British spelling norms. eg. 'realise' instead of 'realize'
 - Start with words like "What", "How", or "When" rather than "Why"
-- Make questions concise, ask only one question and avoid stringing together multiple questions connected by 'and'. 
+- For 'childhood' and 'past' perspectives: focus on past memories and experiences
+- For 'present' perspective: focus on current situations and ongoing experiences
+- For 'future' perspective: use forward-looking language about hopes and plans, not looking back from the future
+
+Examples of good temporal alignment:
+- Childhood: "What childhood memory taught you the most about trust?"
+- Present: "How are you currently approaching personal growth in your life?"
+- Future: "What kind of impact do you hope to have on others in the coming years?"
 
 Here's an example pattern you can use as inspiration, but generate a different question which may or may not follow the pattern:
 ${exampleQuestion}
