@@ -4,10 +4,16 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [question, setQuestion] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isFirstQuestion, setIsFirstQuestion] = useState(true);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const generateQuestion = async () => {
     setLoading(true);
     setError(null);
+    setIsAnimating(true);
+    
+    // Fade out current question
+    await new Promise(resolve => setTimeout(resolve, 200));
     setQuestion(null);
 
     try {
@@ -27,53 +33,59 @@ const App: React.FC = () => {
       const data = await response.json();
       console.log('Received question:', data);
       setQuestion(data.question);
+      setIsFirstQuestion(false);
     } catch (err) {
       console.error('Error generating question:', err);
       setError(`Failed to generate question: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
+      setIsAnimating(false);
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-gray-100 dark:bg-gray-900 min- flex flex-col items-center justify-center p-4 space-y-8">
+    <div className="bg-white min-h-screen flex flex-col items-center justify-center p-4">
       <header className="text-center">
         <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">Easy Connect</h1>
-        <p className="text-2xl text-gray-600 dark:text-gray-400 mt-2">Question prompts to build deeper connections.</p>
+        <p className="text-2xl text-gray-600 mt-2">Question prompts to build deeper connections.</p>
       </header>
+      <div className="flex flex-col items-center space-y-8 w-full max-w-2xl">
+        <div className="bg-white p-8 rounded-lg shadow-xl w-full text-gray-800 text-center min-h-[160px] flex items-center justify-center relative overflow-hidden">
+          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 blur-sm opacity-30"></div>
+          <div className="absolute inset-[2px] rounded-lg bg-white"></div>
+          <div className="relative z-10">
+            <p className={`text-xl font-medium transition-opacity duration-200 ${
+              isAnimating ? 'opacity-0' : 'opacity-100'
+            }`}>
+              {isFirstQuestion ? "Click 'Generate a Question' to get started" : question}
+            </p>
+          </div>
+        </div>
+        <div className="h-8">
+          {loading && (
+            <p className="text-gray-600 animate-pulse">Generating question...</p>
+          )}
+          {error && (
+            <p className="text-red-500">{error}</p>
+          )}
+        </div>
+      </div>
       <button
         onClick={generateQuestion}
         className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
       >
         Generate a Question
       </button>
-      {loading && (
-        <p className="text-gray-600 dark:text-gray-400 animate-pulse">Generating question...</p>
-      )}
-      {error && (
-        <p className="text-red-500">{error}</p>
-      )}
-      {question && (
-        <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-2xl text-gray-800 dark:text-white text-center">
-          <p className="text-xl font-medium">{question}</p>
-        </div>
-      )}
-      <div className="absolute top-4 right-4">
-        <button
-          onClick={() => document.documentElement.classList.toggle('dark')}
-          className="p-2 bg-gray-200 dark:bg-gray-700 rounded-full text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      <footer className="absolute bottom-4 w-full text-center">
+        <a 
+          href="https://ajiteshgogoi.com/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-gray-600 hover:text-gray-800 transition-colors"
         >
-          {document.documentElement.classList.contains('dark') ? (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.005 9.005 0 003 12h18a9.005 9.005 0 00-4.646-8.646z" />
-            </svg>
-          )}
-        </button>
-      </div>
+          © ajitesh gogoi
+        </a>
+      </footer>
     </div>
   );
 };
