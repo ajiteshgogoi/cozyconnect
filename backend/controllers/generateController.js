@@ -135,7 +135,7 @@ exports.generateQuestion = async (req, res) => {
 
 MUST FOLLOW:
 - Sound like something a friend would naturally ask
-- Be simple and clear (under 15 words)
+- Be simple and clear (under 20 words)
 - Ask about ONE specific thing
 - Use correct grammar, paying special attention to:
   * Proper use of "used to" (e.g., "What did you used to believe?" is incorrect)
