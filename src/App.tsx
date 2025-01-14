@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 
-interface ApiResponse {
-  question: string;
-}
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
