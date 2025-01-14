@@ -90,7 +90,9 @@ const App: React.FC = () => {
           <span className="mr-3">❤️</span>
           Easy Connect
         </h1>
-        <p className="text-xl text-orange-800/80 mt-4">❤️ Conversation prompts to help you create deeper connections.</p>
+        <div className="bg-orange-900/90 rounded-lg px-6 py-4 mt-4 inline-block">
+          <p className="text-xl text-orange-50">Conversation prompts to help you create deeper connections.</p>
+        </div>
       </header>
       <div className="flex flex-col items-center space-y-10 w-full max-w-2xl">
         <div className="bg-orange-50 p-8 rounded-lg shadow-xl w-full text-orange-900 text-center min-h-[160px] flex items-center justify-center relative overflow-hidden mb-6">
