@@ -46,7 +46,7 @@ const App: React.FC = () => {
   return (
     <div className="bg-white min-h-screen flex flex-col items-center justify-center p-4">
       <header className="text-center mb-12">
-        <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">Easy Connect</h1>
+        <h1 className="text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">Easy Connect</h1>
         <p className="text-2xl text-gray-600 mt-4">Question prompts to build deeper connections.</p>
       </header>
       <div className="flex flex-col items-center space-y-10 w-full max-w-2xl">
@@ -57,7 +57,7 @@ const App: React.FC = () => {
             <p className={`text-xl font-medium transition-opacity duration-200 ${
               isAnimating ? 'opacity-0' : 'opacity-100'
             }`}>
-              {isFirstQuestion ? "Click 'Generate a Question' to get started" : question}
+              {isFirstQuestion ? "Click 'Generate a Question' to get started..." : question}
             </p>
           </div>
         </div>
