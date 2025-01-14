@@ -63,7 +63,7 @@ const App: React.FC = () => {
       }
 
       // User-friendly error messages
-      let errorMessage = 'Failed to generate question. Please try again.';
+      let errorMessage = 'Failed to generate question.😢 Please try again.';
       if (err instanceof Error) {
         if (err.name === 'AbortError') {
           errorMessage = 'Request timed out.😢 Please check your internet connection and try again.';
