@@ -70,6 +70,13 @@ STRICT TIME RULES:
   - "what future moment..."
   - Any construction that assumes knowledge of future events
 
+STRICT GRAMMAR RULES:
+- Keep the question under 15 words
+- Ask about ONE thing only - no compound questions
+- Use simple, everyday language
+- Avoid complex clauses or nested thoughts
+- Be direct and clear
+
 Here's an example pattern for this specific perspective:
 ${exampleQuestion}
 
