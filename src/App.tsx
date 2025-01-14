@@ -116,7 +116,7 @@ const App: React.FC = () => {
       <div className="mt-5">
         <button
           onClick={generateQuestion}
-          className="bg-gradient-to-r from-orange-400 via-orange-500 to-pink-600 text-white font-bold py-4 px-8 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-[1.03] hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-300 mb-12 text-lg shadow-[inset_0_0_8px_rgba(0,0,0,0.1)] hover:shadow-[inset_0_0_12px_rgba(0,0,0,0.15)] hover:shadow-orange-300/50 active:scale-95 active:translate-y-0 [text-shadow:0_1px_2px_rgba(0,0,0,0.2)]"
+          className="bg-gradient-to-r from-orange-400 to-pink-500 text-white font-bold py-5 px-10 rounded-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-300 mb-12 text-xl shadow-[0_4px_8px_rgba(0,0,0,0.15),0_0_12px_rgba(255,165,0,0.3),inset_0_2px_4px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_12px_rgba(0,0,0,0.2),0_0_16px_rgba(255,105,180,0.4),inset_0_2px_4px_rgba(0,0,0,0.2)]"
         >
           Generate a Question
         </button>
