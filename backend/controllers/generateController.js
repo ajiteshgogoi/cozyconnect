@@ -1,10 +1,12 @@
 const { callGroqApi } = require('../utils/apiClient');
 
 const themes = [
-  'trust', 'friendship', 'family', 'love', 'connection', 'hope',
-  'change', 'challenges', 'learning', 'strengths', 'decisions',
-  'purpose', 'success', 'beliefs', 'passion', 'helping others', 'motivation',
-  'adventures', 'achievements', 'mistakes', 'surprises', 'transition', 'hobbies'
+  'trust', 'friendship', 'family', 'love', 'change',
+  'overcoming challenges', 'learning', 'strengths', 'decisions',
+  'purpose', 'success', 'beliefs', 'passion', 'helping others',
+  'health and well-being', 'creativity', 'cultural experiences',
+  'adventures', 'achievements', 'mistakes', 'transition',
+  'technology and change', 'curiosity'
 ];
 
 const perspectives = ['childhood', 'past', 'present moment', 'future aspirations'];
