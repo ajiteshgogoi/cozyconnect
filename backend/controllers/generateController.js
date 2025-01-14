@@ -9,7 +9,9 @@ const themes = [
   'technology and change', 'curiosity'
 ];
 
-const perspectives = ['childhood', 'past', 'present moment', 'future aspirations'];
+const perspectives = ['childhood', 'the past', 'the present moment', 'future aspirations'];
+
+const starters = ['why', 'how', 'what'];
 
 // Helper function to shuffle array
 function shuffleArray(array) {
@@ -36,13 +38,16 @@ exports.generateQuestion = async (req, res) => {
     // Select a random perspective
     const randomPerspective = perspectives[Math.floor(Math.random() * perspectives.length)];
 
+    // Select a random starter
+    const randomStarter = starters[Math.floor(Math.random() * starters.length)];
+
     // Build the prompt for the LLM
-    const prompt = `Generate a meaningful and thought-provoking question about "${selectedTheme}" from the perspective of "${randomPerspective}". 
+    const prompt = `Generate a meaningful and thought-provoking question about "${selectedTheme}" from the perspective of "${randomPerspective}". Start the question with "${randomStarter}". 
       
 Must be:
 - Meaningful and conversational
 - Under 15 words
-- Encourage sharing a story, experience, or insight
+- Encourage sharing of a story, experience, or insight
 Avoid:
 - Trivial or overly simple questions (e.g., "What did you eat today?")
 - Incorrect grammar
