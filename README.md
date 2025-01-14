@@ -40,7 +40,7 @@ cp .env.example .env
 ### API Endpoint
 
 ```javascript
-POST /api/generate-question
+POST /api/generate
 
 // Response
 {
@@ -51,7 +51,7 @@ POST /api/generate-question
 ### Example Integration
 
 ```javascript
-const response = await fetch('/api/generate-question', {
+const response = await fetch('/api/generate', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
