@@ -1,17 +1,17 @@
 const { callGroqApi } = require('../utils/apiClient');
 
 const themes = [
-  'trust', 'friendship', 'family', 'love', 'change',
+  'trust', 'friendship', 'family', 'love', 'change', 'relationship',
   'overcoming challenges', 'learning', 'strengths', 'decisions',
   'purpose', 'success', 'beliefs', 'passion', 'helping others',
   'health and well-being', 'creativity', 'cultural experiences',
   'adventures', 'achievements', 'mistakes', 'transition',
-  'technology and change', 'curiosity'
+  'hobbies', 'curiosity'
 ];
 
 const perspectives = ['childhood', 'the past', 'the present moment', 'future aspirations'];
 
-const starters = ['why', 'how', 'what'];
+const starters = ['how', 'what'];
 
 // Helper function to shuffle array
 function shuffleArray(array) {
@@ -42,16 +42,19 @@ exports.generateQuestion = async (req, res) => {
     const randomStarter = starters[Math.floor(Math.random() * starters.length)];
 
     // Build the prompt for the LLM
-    const prompt = `Generate a meaningful and thought-provoking question about "${selectedTheme}" from the perspective of "${randomPerspective}". Start the question with "${randomStarter}". 
+    const prompt = `Generate a meaningful and thought-provoking question about the theme: "${selectedTheme}", from the perspective of "${randomPerspective}". Focus on a specific aspect or subtheme about "${selectedTheme}". Start the question with "${randomStarter}". 
       
-Must be:
-- Meaningful and conversational
+MUST BE:
+- Personal and conversational
 - Under 15 words
-- Encourage sharing of a story, experience, or insight
-Avoid:
+- Encourage sharing of a story, experience, insight or opinion
+AVOID:
 - Trivial or overly simple questions (e.g., "What did you eat today?")
+- Abstract or overly philosophical phrasing
 - Incorrect grammar
+- Addressing to self using words like 'I' and 'My' (e.g., "What memory from my past still influences my beliefs today?")
 - Questions that are too broad (e.g., "What was your best adventure?")
+
 Example of a good question:
 - What moment from your childhood taught you about trust?`;
 
@@ -108,7 +111,7 @@ Example of a good question:
     console.error('Request headers:', req.headers);
     console.error('Request body:', req.body);
     res.status(500).json({ 
-      error: 'Failed to generate a question. Please try again.',
+      error: 'Failed to generate a question.😢 Please try again.',
       details: error.message 
     });
   }
