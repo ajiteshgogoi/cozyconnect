@@ -6,7 +6,7 @@ const themes = [
   // Personal Growth (more tangible)
   'change', 'challenges', 'learning', 'strengths', 'decisions',
   // Values (clearer)
-  'purpose', 'success', 'beliefs', 'passion', 'helping others',
+  'purpose', 'success', 'beliefs', 'passion', 'helping others', 'motivation',
   // Life Experiences (more specific)
   'adventures', 'achievements', 'mistakes', 'surprises', 'transitions'
 ];
@@ -22,7 +22,7 @@ const questionPatterns = {
   'past': [
     "What's a moment from your past that changed you?",
     "What's one of your favorite memories?",
-    "What adventure in your life stands out to you?",
+    "What's the most adventurous thing you've done?",
     "What's the best advice someone gave you?",
     "What skill are you glad you learned?"
   ],
@@ -67,10 +67,9 @@ MUST FOLLOW:
 
 AVOID:
 - Abstract or philosophical questions
-- Questions about hardships, comfort, vulnerability
 - Anything that sounds therapeutic or clinical
 - Complex emotional terms
-- Multiple questions or 'and/or' combinations
+- Multiple questions or compound questions
 
 Here's an example of a good, natural question:
 ${exampleQuestion}
