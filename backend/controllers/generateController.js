@@ -59,7 +59,7 @@ exports.generateQuestion = async (req, res) => {
 
 MUST FOLLOW:
 - Sound like something a friend would naturally ask
-- Be simple and clear (under 12 words)
+- Be simple and clear (under 15 words)
 - Ask about ONE specific thing
 - Be easy to understand immediately
 - Focus on positive or neutral topics
