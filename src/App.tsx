@@ -66,7 +66,7 @@ const App: React.FC = () => {
       let errorMessage = 'Failed to generate question. Please try again.';
       if (err instanceof Error) {
         if (err.name === 'AbortError') {
-          errorMessage = 'Request timed out. Please check your internet connection.';
+          errorMessage = 'Request timed out.😢 Please check your internet connection and try again.';
         } else if (err.message.includes('No internet connection')) {
           errorMessage = err.message;
         }
