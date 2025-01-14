@@ -37,16 +37,17 @@ exports.generateQuestion = async (req, res) => {
     const randomPerspective = perspectives[Math.floor(Math.random() * perspectives.length)];
 
     // Build the prompt for the LLM
-    const prompt = `Generate a clear, engaging open-ended question about "${selectedTheme}" from the perspective of "${randomPerspective}". 
+    const prompt = `Generate a meaningful and thought-provoking question about "${selectedTheme}" from the perspective of "${randomPerspective}". 
       
 Must be:
-- Natural and conversational
+- Meaningful and conversational
 - Under 15 words
-- A question that ecourages sharing of personal stories or experiences
+- Encourage sharing a story, experience, or insight
 Avoid:
-- Factual question like: "What is your favourite food?"
+- Trivial or overly simple questions (e.g., "What did you eat today?")
 - Abstract or overly philosophical phrasing
 - Incorrect grammar
+- Questions that are too broad (e.g., "What was your best adventure?")
 Example of a good question:
 - What moment from your childhood taught you about trust?`;
 
