@@ -22,15 +22,17 @@
     },
     {
       "src": "/(.*)",
-      "dest": "build/$1"
+      "headers": {
+        "Cache-Control": "public, max-age=0, must-revalidate"
+      },
+      "dest": "/$1"
     },
     {
       "src": "/(.*)",
       "dest": "/index.html",
       "headers": {
         "Cache-Control": "no-cache"
-      },
-      "continue": true
+      }
     }
   ]
 }
