@@ -22,11 +22,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "build/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/"
+      "dest": "/index.html"
     }
   ]
 }
