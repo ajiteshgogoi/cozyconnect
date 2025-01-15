@@ -93,13 +93,15 @@ Example of a good question:
       }
     }
 
-    // Fallback mechanism
+    // Handle API failure
     if (!questionText) {
-      console.error('All API attempts failed, using fallback');
-      questionText = `What is a memorable experience about ${selectedTheme} from your ${randomPerspective}?`;
+      console.error('All API attempts failed');
+      return res.status(503).json({
+        error: "We couldn’t generate a question right now due to high demand. Please try again later."
+      });
     }
 
-    res.status(200).json({ 
+    res.status(200).json({
       question: questionText,
       metadata: {
         theme: selectedTheme,

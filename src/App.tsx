@@ -113,7 +113,12 @@ const App: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="mt-5">
+      <div className="w-full max-w-2xl">
+        <p className="text-xs text-gray-500 text-center pt-4 pb-8">
+          <span className="underline">Note:</span> During high demand, question generation may take longer. Thank you for your patience!
+        </p>
+      </div>
+      <div className="flex flex-col items-center">
         <button
           onClick={generateQuestion}
           className="bg-orange-500 text-white font-bold py-5 px-10 rounded-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-300 mb-12 text-xl hover:-translate-y-0.5 shadow-md hover:shadow-lg hover:bg-orange-600"
