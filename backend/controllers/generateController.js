@@ -42,7 +42,7 @@ exports.generateQuestion = async (req, res) => {
     const randomStarter = starters[Math.floor(Math.random() * starters.length)];
 
     // Build the prompt for the LLM
-    const prompt = `Generate a meaningful and thought-provoking question about the theme: "${selectedTheme}", from the perspective of "${randomPerspective}". Focus on a specific aspect or subtheme about "${selectedTheme}". Start the question with "${randomStarter}". 
+    const prompt = `Generate a meaningful and thought-provoking open-ended question about the theme: "${selectedTheme}", from the perspective of "${randomPerspective}". Focus on a specific aspect or subtheme about "${selectedTheme}". Start the question with "${randomStarter}". 
       
 MUST BE:
 - Personal and conversational
@@ -51,6 +51,7 @@ MUST BE:
 AVOID:
 - Trivial or overly simple questions (e.g., "What did you eat today?")
 - Abstract or overly philosophical phrasing
+- Close-ended questions
 - Incorrect grammar
 - Addressing to self using words like 'I' and 'My' (e.g., "What memory from my past still influences my beliefs today?")
 - Questions that are too broad (e.g., "What was your best adventure?")
