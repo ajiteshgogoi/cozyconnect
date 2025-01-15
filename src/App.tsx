@@ -8,6 +8,7 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isFirstQuestion, setIsFirstQuestion] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [questionReceived, setQuestionReceived] = useState(false);
 
   const generateQuestionInternal = async (retryCount = 0): Promise<void> => {
     setLoading(true);
@@ -47,6 +48,7 @@ const App: React.FC = () => {
       console.log('Received question:', data);
       setQuestion(data.question);
       setIsFirstQuestion(false);
+      setQuestionReceived(true);
     } catch (error) {
       console.error('Error generating question:', error);
       
@@ -77,7 +79,11 @@ const App: React.FC = () => {
       setError(errorMessage);
     } finally {
       setIsAnimating(false);
-      setLoading(false);
+      // Only stop loading after animation completes
+      setTimeout(() => {
+        setLoading(false);
+        setQuestionReceived(false);
+      }, 200);
     }
   };
 
@@ -107,7 +113,7 @@ const App: React.FC = () => {
                   <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-orange-200 to-pink-200 blur opacity-40"></div>
                   <div className="absolute inset-[2px] rounded-lg bg-orange-50"></div>
                   <div className="relative z-10 -mt-2">
-                    {loading ? (
+                    {loading && !questionReceived ? (
                       <p className="text-orange-700/80 animate-pulse">Generating question...</p>
                     ) : error ? (
                       <p className="text-red-500">{error}</p>

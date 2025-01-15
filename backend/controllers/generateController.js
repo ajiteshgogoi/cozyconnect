@@ -178,12 +178,12 @@ Example of a good question:
         
         Criteria:
         - Personal and conversational
-        - Under ${wordLimit} words
+        - Clear and easy to understand
         - Encourages sharing of a story, experience, insight, or opinion
-        - Avoids trivial, overly simple, or abstract questions
+        - Avoids trivial, vague, overly simple, or abstract questions
         - Avoids close-ended phrasing and incorrect grammar
         
-        Question: "{questionText}"`;
+Question: {questionText}`;
         
           let refinedQuestion = questionText;
           let validationResponse = null;
@@ -196,14 +196,15 @@ Example of a good question:
           for (let validationAttempt = 1; validationAttempt <= (maxRetries + 1); validationAttempt++) {
             try {
               // Generate validation prompt
-              const validationPrompt = validationPromptBase.replace("{questionText}", refinedQuestion);
+          const validationPrompt = validationPromptBase.replace('{questionText}', refinedQuestion);
               const validationResult = await callGroqApi(validationPrompt);
         
               console.log('Validation Response:', JSON.stringify(validationResult, null, 2));
         
               // Check for validity
               if (/^\s*valid\b(?!\w)/i.test(validationResult)) {
-                validationResponse = refinedQuestion;
+                // Remove surrounding quotes if present
+                validationResponse = refinedQuestion.replace(/^["']|["']$/g, '');
                 validQuestionFound = true;
                 questionText = validationResponse; // Update the question text with validated version
                 break;
