@@ -114,7 +114,7 @@ const App: React.FC = () => {
         </div>
       </div>
       <div className="w-full max-w-2xl">
-        <p className="text-xs text-gray-500 text-center pt-4 pb-8">
+        <p className="text-s text-gray-500 text-center pt-4 pb-8">
           <span className="underline">Note:</span> During high demand, question generation may take longer. Thank you for your patience!
         </p>
       </div>
