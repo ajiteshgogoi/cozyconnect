@@ -11,7 +11,7 @@ const Instructions: React.FC = () => {
           <section>
             <h2 className="text-xl font-semibold mb-2">Welcome to Cozy Connect!</h2>
             <p className="text-lg leading-relaxed">
-              This is a fun way to have meaningful conversations and get to know someone better. Here's how to make the most of your experience.
+              This is a fun way to have meaningful conversations and get to know someone better. Here's how to make the most of your experience:
             </p>
           </section>
 
@@ -20,7 +20,7 @@ const Instructions: React.FC = () => {
             <ol className="list-decimal list-inside space-y-3">
               <li>Click the 'Generate a Question' button.</li>
               <li>Wait a few seconds while we create a unique question for you.</li>
-              <li>Read the question and share it with your partner or friend.</li>
+              <li>Read the question and share it with your partner.</li>
               <li>Discuss your answers together.</li>
             </ol>
           </section>
