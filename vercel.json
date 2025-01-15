@@ -9,12 +9,20 @@
         "buildCommand": "npm run build",
         "installCommand": "npm install && npm install typescript@latest"
       }
+    },
+    {
+      "src": "backend/server.js",
+      "use": "@vercel/node"
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "destination": "/"
+      "src": "/api/(.*)",
+      "dest": "/backend/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/"
     }
   ],
   "cleanUrls": true
