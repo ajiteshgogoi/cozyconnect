@@ -18,23 +18,19 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/backend/server.js",
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type"
-      }
+      "dest": "backend/server.js"
     },
     {
       "src": "/(.*)",
-      "dest": "/"
-    }
-  ],
-  "rewrites": [
+      "dest": "build/$1"
+    },
     {
-      "source": "/api/(.*)",
-      "destination": "/backend/server.js"
+      "rewrites": [
+        {
+          "source": "/(.*)",
+          "destination": "/"
+        }
+      ]
     }
-  ],
-  "cleanUrls": true
+  ]
 }
