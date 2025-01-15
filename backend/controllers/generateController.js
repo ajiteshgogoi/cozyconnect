@@ -154,7 +154,7 @@ Example of a good question:
               console.log('Validation Response:', JSON.stringify(validationResult, null, 2));
         
               // Check for validity
-              if (/^\s*valid\b/i.test(validationResult)) {
+              if (/^\s*valid\b(?!\w)/i.test(validationResult)) {
                 validationResponse = refinedQuestion;
                 break;
               }
