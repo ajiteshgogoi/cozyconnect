@@ -88,15 +88,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="bg-orange-50 min-h-screen flex flex-col items-center justify-center p-4 bg-[radial-gradient(#e0e0e0_12%,transparent_12%)] bg-[length:24px_24px]">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-500 pb-2 leading-tight drop-shadow-[0_2px_4px_rgba(255,192,203,0.3)]">
-            <span className="mr-3 align-middle">❤️</span>
-            Cozy Connect
-          </h1>
-          <div className="bg-orange-900/90 rounded-lg px-8 py-1 w-full max-w-2xl">
-            <p className="text-l text-orange-50">Meaningful prompts for heartfelt conversations.</p>
-          </div>
-        </header>
+        <Header />
 
         <Routes>
           <Route path="/instructions" element={<Instructions />} />
@@ -168,6 +160,25 @@ const App: React.FC = () => {
         </footer>
       </div>
     </Router>
+  );
+};
+
+const Header: React.FC = () => {
+  return (
+    <header className="text-center mb-8">
+      <div 
+        onClick={() => window.location.href = '/'}
+        className="cursor-pointer"
+      >
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-500 pb-2 leading-tight drop-shadow-[0_2px_4px_rgba(255,192,203,0.3)]">
+          <span className="mr-3 align-middle">❤️</span>
+          Cozy Connect
+        </h1>
+      </div>
+      <div className="bg-orange-900/90 rounded-lg px-8 py-1 w-full max-w-2xl">
+        <p className="text-l text-orange-50">Meaningful prompts for heartfelt conversations.</p>
+      </div>
+    </header>
   );
 };
 
