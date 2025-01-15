@@ -87,7 +87,7 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <div className="bg-orange-50 min-h-screen flex flex-col items-center justify-center p-4 bg-[radial-gradient(#e0e0e0_12%,transparent_12%)] bg-[length:24px_24px]">
+      <div className="bg-orange-50 min-h-screen flex flex-col items-center justify-center p-4 bg-[radial-gradient(rgba(224,224,224,0.8)_12%,transparent_12%)] bg-[length:24px_24px]">
         <Header />
 
         <Routes>
