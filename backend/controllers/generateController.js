@@ -199,7 +199,7 @@ Example of a good question:
     if (!questionText) {
       console.error('All API attempts failed:', lastError);
       return res.status(503).json({
-        error: "We couldn’t generate a question right now due to high demand. Please try again later."
+        error: "We couldn’t generate a question right now due to high demand. Please try again after a few minutes."
       });
     }
 
