@@ -1,4 +1,18 @@
 const { callGroqApi } = require('../utils/apiClient');
+const rateLimit = require('express-rate-limit');
+// Rate limiting middleware
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 10 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: 'Too many requests, please try again later.',
+  handler: (req, res) => {
+    res.status(429).json({
+      error: 'Too many requests, please try again later.'
+    });
+  }
+});
 
 const themes = [
   { main: 'trust', subthemes: ['betrayal', 'vulnerability', 'building trust', 'rebuilding after betrayal', 'trusting yourself'] },
@@ -111,7 +125,8 @@ const getRandomElements = (array, count = 2, filter = () => true) => {
   return shuffleArray([...filteredArray]).slice(0, count);
 };
 
-exports.generateQuestion = async (req, res) => {
+// Apply rate limiting to the generateQuestion endpoint
+const generateQuestionHandler = async (req, res) => {
   try {
     // Select random theme, subtheme, perspective, and starter
     const selectedThemeObj = getRandomElements(themes, 1)[0];
@@ -178,7 +193,7 @@ Example of a good question:
             return match ? match[1].trim() : null;
           };
         
-          for (let validationAttempt = 1; validationAttempt <= maxRetries; validationAttempt++) {
+          for (let validationAttempt = 1; validationAttempt <= (maxRetries + 1); validationAttempt++) {
             try {
               // Generate validation prompt
               const validationPrompt = validationPromptBase.replace("{questionText}", refinedQuestion);
@@ -190,6 +205,7 @@ Example of a good question:
               if (/^\s*valid\b(?!\w)/i.test(validationResult)) {
                 validationResponse = refinedQuestion;
                 validQuestionFound = true;
+                questionText = validationResponse; // Update the question text with validated version
                 break;
               }
         
@@ -213,8 +229,11 @@ Example of a good question:
           }
         
           if (validQuestionFound) {
+            // Use the validated and potentially refined question
             questionText = validationResponse;
             break;
+          } else {
+            throw new Error('Question failed validation');
           }
         } else {
           throw new Error('Invalid response format.');
@@ -229,13 +248,31 @@ Example of a good question:
       }
     }
 
-    if (!questionText) {
-      console.error('All API attempts failed:', lastError);
-      return res.status(503).json({
-        error: "We couldn’t generate a question right now due to high demand. Please try again after a few minutes."
+    if (!questionText || !validQuestionFound) {
+      console.error('Failed to generate valid question:', lastError);
+      
+      // Extract retry time from error message
+      let retryTime = 'a few minutes';
+      if (lastError?.message?.includes('Please try again in')) {
+        const timeMatch = lastError.message.match(/Please try again in (\d+m\d+\.\d+s)/);
+        if (timeMatch) {
+          const [minutes, seconds] = timeMatch[1].split('m');
+          // Round up to nearest minute
+          retryTime = `${Math.ceil(parseFloat(minutes) + (parseFloat(seconds)/60))} minutes`;
+        }
+      }
+      
+      return res.status(400).json({
+        error: `We couldn't generate a valid question. Please try again in ${retryTime}.`,
+        details: lastError?.message || 'Question validation failed'
       });
     }
 
+    // Add rate limit headers to response
+    res.setHeader('X-RateLimit-Limit', req.rateLimit.limit);
+    res.setHeader('X-RateLimit-Remaining', req.rateLimit.remaining);
+    res.setHeader('X-RateLimit-Reset', Math.ceil(req.rateLimit.resetTime.getTime() / 1000));
+    
     res.status(200).json({
       question: questionText,
       metadata: {
@@ -248,8 +285,11 @@ Example of a good question:
   } catch (error) {
     console.error('Error generating question:', error.message);
     res.status(500).json({
-      error: "We couldn't generate your question at the moment. Please try again.",
+      error: "We couldn't generate your question at the moment.😢 Please try again.",
       details: error.message
     });
   }
 };
+
+// Export with rate limiting middleware
+exports.generateQuestion = [apiLimiter, generateQuestionHandler];

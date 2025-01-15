@@ -47,11 +47,11 @@ const App: React.FC = () => {
       console.log('Received question:', data);
       setQuestion(data.question);
       setIsFirstQuestion(false);
-    } catch (err) {
-      console.error('Error generating question:', err);
+    } catch (error) {
+      console.error('Error generating question:', error);
       
       // Retry logic with exponential backoff
-      if (retryCount < 2 && err instanceof Error && err.name !== 'AbortError') {
+      if (retryCount < 2 && error instanceof Error && error.name !== 'AbortError') {
         const delay = Math.pow(2, retryCount) * 1000; // Exponential backoff
         await new Promise(resolve => setTimeout(resolve, delay));
         return generateQuestionInternal(retryCount + 1);
@@ -59,8 +59,22 @@ const App: React.FC = () => {
 
       // User-friendly error messages
       let errorMessage = 'Failed to generate question. Please try again.';
-      if (err instanceof Error && err.message.includes('No internet connection')) {
-        errorMessage = err.message;
+      
+      // Handle backend error response
+      if (error instanceof Error) {
+        try {
+          const errorData = JSON.parse(error.message.replace('API Error: ', ''));
+          if (errorData.error && errorData.details) {
+            errorMessage = `${errorData.error}: ${errorData.details}`;
+          } else if (error.message.includes('No internet connection')) {
+            errorMessage = error.message;
+          }
+        } catch {
+          // Fallback to original error handling
+          if (error.message.includes('No internet connection')) {
+            errorMessage = error.message;
+          }
+        }
       }
       
       setError(errorMessage);
