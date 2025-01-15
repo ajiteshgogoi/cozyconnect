@@ -28,11 +28,6 @@ const App: React.FC = () => {
         ? 'https://cozyconnect.vercel.app/api/generate'
         : 'http://localhost:5000/api/generate';
 
-      const controller = new AbortController();
-      // Increase timeout to 10 seconds for mobile
-      const timeoutDuration = window.innerWidth <= 768 ? 10000 : 5000;
-      const timeoutId = setTimeout(() => controller.abort(), timeoutDuration);
-      
       const response = await fetch(apiUrl, {
         method: 'GET',
         headers: {
@@ -40,10 +35,8 @@ const App: React.FC = () => {
           'Accept': 'application/json',
         },
         credentials: 'include',
-        mode: 'cors',
-        signal: controller.signal
+        mode: 'cors'
       });
-      clearTimeout(timeoutId);
       
       if (!response.ok) {
         const errorData = await response.json();
@@ -66,12 +59,8 @@ const App: React.FC = () => {
 
       // User-friendly error messages
       let errorMessage = 'Failed to generate question. Please try again.';
-      if (err instanceof Error) {
-        if (err.name === 'AbortError') {
-          errorMessage = 'Request timed out.😢 Please check your internet connection and try again.';
-        } else if (err.message.includes('No internet connection')) {
-          errorMessage = err.message;
-        }
+      if (err instanceof Error && err.message.includes('No internet connection')) {
+        errorMessage = err.message;
       }
       
       setError(errorMessage);

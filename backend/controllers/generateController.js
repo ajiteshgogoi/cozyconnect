@@ -145,8 +145,9 @@ Example of a good question:
     let questionText = null;
     const maxRetries = 1; // Number of retries
     let lastError = null;
+    let validQuestionFound = false;
 
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    for (let attempt = 1; attempt <= maxRetries && !validQuestionFound; attempt++) {
       try {
         const response = await Promise.race([
           callGroqApi(prompt),
@@ -188,13 +189,14 @@ Example of a good question:
               // Check for validity
               if (/^\s*valid\b(?!\w)/i.test(validationResult)) {
                 validationResponse = refinedQuestion;
+                validQuestionFound = true;
                 break;
               }
         
               // Attempt to extract and refine the question
               const extractedRefinement = extractRefinedQuestion(validationResult);
               if (extractedRefinement) {
-                refinedQuestion = extractedRefinement;
+                refinedQuestion = extractedRefinement; // Update the question for next attempt
               } else {
                 throw new Error('Refinement failed: No refined question extracted.');
               }
@@ -210,12 +212,11 @@ Example of a good question:
             }
           }
         
-          // Ensure a valid response exists after the loop
-          if (!validationResponse) {
-            throw new Error('Validation process did not result in a valid question.');
+          if (validQuestionFound) {
+            questionText = validationResponse;
+            break;
           }
-        }        
-          else {
+        } else {
           throw new Error('Invalid response format.');
         }
       } catch (error) {
