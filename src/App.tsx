@@ -165,17 +165,17 @@ const App: React.FC = () => {
 
 const Header: React.FC = () => {
   return (
-    <header className="text-center mb-8">
+    <header className="text-center mb-6">
       <div 
         onClick={() => window.location.href = '/'}
         className="cursor-pointer"
       >
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-500 pb-2 leading-tight drop-shadow-[0_2px_4px_rgba(255,192,203,0.3)] flex items-center justify-center">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-500 pb-2 leading-tight drop-shadow-[0_2px_4px_rgba(255,192,203,0.3)] flex items-center justify-center">
           <span className="mr-3">❤️</span>
           Cozy Connect
         </h1>
       </div>
-      <div className="bg-orange-900/90 rounded-lg px-8 py-1 w-full max-w-2xl">
+      <div className="bg-orange-900/90 rounded-lg px-8 py-1 w-full max-w-2xl mt-1">
         <p className="text-l text-orange-50">Meaningful prompts for heartfelt conversations.</p>
       </div>
     </header>
