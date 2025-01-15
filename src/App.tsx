@@ -60,12 +60,15 @@ const App: React.FC = () => {
       }
 
       // Show error messages
-      let errorMessage = '';
+      let errorMessage = 'An unexpected error occurred. Please try again.';
       if (error instanceof Error) {
         try {
           const errorData = JSON.parse(error.message.replace('API Error: ', ''));
-          if (errorData.error && errorData.details) {
-            errorMessage = `${errorData.error}: ${errorData.details}`;
+          if (errorData.type === 'error' && errorData.message) {
+            errorMessage = errorData.message;
+            if (errorData.details) {
+              errorMessage += ` (${errorData.details})`;
+            }
           } else if (error.message.includes('No internet connection')) {
             errorMessage = error.message;
           }

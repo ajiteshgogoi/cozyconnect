@@ -3,7 +3,7 @@ const rateLimit = require('express-rate-limit');
 // Rate limiting middleware
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 15, // Limit each IP to 10 requests per windowMs
+  max: 15, // Limit each IP to 15 requests per windowMs
   standardHeaders: true,
   legacyHeaders: false,
   message: 'Too many generation requests. Please try again later.',
@@ -48,8 +48,7 @@ const perspectives = [
   'through the eyes of a mentor',
   'from the perspective of a learner',
   'cultural lens',
-  'generational perspective',
-  'seasonal moments',
+  'generational perspective',  
   'milestones in life',
   'community perspective',
   'global view',
@@ -80,7 +79,7 @@ const themeStarters = {
   mistakes: ['what lesson', 'how did', 'why do', 'can you explain', 'what taught you about', 'in what way'],
   transition: ['how did', 'what led to', 'in what way', 'why do you think', 'what example', 'how do you view'],
   hobbies: ['what hobby', 'how do', 'why do', 'in what way', 'what example', 'how has'],
-  curiosity: ['what sparked', 'how has', 'why do', 'in what way', 'what taught', 'how do you view']
+  curiosity: ['can you share', 'why is', 'how has', 'why do', 'in what way', 'what taught', 'how do you view']
 };
 
 const emotionalModifiers = [
@@ -182,6 +181,8 @@ Example of a good question:
         - Encourages sharing of a story, experience, insight, or opinion
         - Avoids trivial, vague, overly simple, or abstract questions
         - Avoids close-ended phrasing and incorrect grammar
+        - Includes at least one of these words: you, your, yours
+        - No usage of these words: I, me, my, mine
         
 Question: {questionText}`;
         
@@ -264,8 +265,10 @@ Question: {questionText}`;
       }
       
       return res.status(400).json({
-        error: `We couldn't generate a question due to high demand. Please try again in ${retryTime}.`,
-        details: lastError?.message || 'Question validation failed'
+        type: 'error',
+        message: `We couldn't generate a question due to high demand. Please try again in ${retryTime}.`,
+        details: lastError?.message || 'Question validation failed',
+        code: 'GENERATION_FAILED'
       });
     }
 
@@ -286,8 +289,10 @@ Question: {questionText}`;
   } catch (error) {
     console.error('Error generating question:', error.message);
     res.status(500).json({
-      error: "We couldn't generate your question.😢 Please try again.",
-      details: error.message
+      type: 'error',
+      message: "We couldn't generate your question.😢 Please try again.",
+      details: error.message,
+      code: 'SERVER_ERROR'
     });
   }
 };
