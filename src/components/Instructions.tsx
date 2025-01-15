@@ -44,7 +44,7 @@ const Instructions: React.FC = () => {
             </ol>
           </section>
 
-          <div className="pt-6 flex justify-center">
+          <div className="pt-6 pb-6 flex justify-center">
             <Link
               to="/"
               className="bg-orange-500 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-300 hover:bg-orange-600 inline-block"
