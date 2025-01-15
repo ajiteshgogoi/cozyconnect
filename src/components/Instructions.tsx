@@ -20,7 +20,7 @@ const Instructions: React.FC = () => {
             <ol className="list-decimal list-inside space-y-3">
               <li>Click the 'Generate a Question' button.</li>
               <li>Wait a few seconds while we create a unique question for you.</li>
-              <li>Read the question and share it with your partner.</li>
+              <li>Read the question and share it with your partner or friend.</li>
               <li>Discuss your answers together.</li>
             </ol>
           </section>
