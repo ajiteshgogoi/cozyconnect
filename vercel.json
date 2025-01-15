@@ -7,7 +7,8 @@
       "config": {
         "distDir": "build",
         "buildCommand": "CI=false npm run build",
-        "installCommand": "npm install && npm install typescript@latest"
+        "installCommand": "npm install && npm install typescript@latest",
+        "outputDirectory": "build"
       }
     },
     {
