@@ -15,14 +15,28 @@
       "use": "@vercel/node"
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/(.*)",
-      "destination": "backend/server.js"
+      "src": "/api/(.*)",
+      "dest": "backend/server.js"
     },
     {
-      "source": "/(.*)",
-      "destination": "/build/index.html"
+      "src": "/static/(.*)",
+      "dest": "/build/static/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/build/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/build/index.html",
+      "headers": {
+        "Cache-Control": "no-cache"
+      }
     }
   ]
 }
