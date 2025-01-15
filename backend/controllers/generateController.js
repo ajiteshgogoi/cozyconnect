@@ -31,9 +31,16 @@ const perspectives = [
   'the past',
   'the present moment',
   'future aspirations',
-  'a turning point in life',
-  'a moment of failure',
-  'an inspiring encounter'
+  'through the eyes of a mentor',
+  'from the perspective of a learner',
+  'cultural lens',
+  'generational perspective',
+  'seasonal moments',
+  'milestones in life',
+  'community perspective',
+  'global view',
+  'a turning point',
+  'the perspective of hindsight'
 ];
 
 const themeStarters = {
@@ -62,7 +69,32 @@ const themeStarters = {
   curiosity: ['what sparked', 'how has', 'why do', 'in what way', 'what taught', 'how do you view']
 };
 
-const emotionalModifiers = ['joyful', 'challenging', 'life-changing', 'unexpected'];
+const emotionalModifiers = [
+  'joyful',
+  'challenging',
+  'life-changing',
+  'unexpected',
+  'empowering',
+  'heart-warming',
+  'bittersweet',
+  'reflective',
+  'liberating',
+  'uplifting',
+  'poignant',
+  'intense',
+  'resilient',
+  'grateful',
+  'content',
+  'nostalgic',
+  'hopeful',
+  'compassionate',
+  'vulnerable',
+  'motivating',
+  'cathartic',
+  'peaceful',
+  'euphoric',
+  'fateful'
+];
 
 // Helper function to shuffle an array
 const shuffleArray = (array) => {
@@ -111,14 +143,14 @@ Example of a good question:
 - What moment from your childhood taught you about trust?`;
 
     let questionText = null;
-    const maxRetries = 3;
+    const maxRetries = 1; // Number of retries
     let lastError = null;
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         const response = await Promise.race([
           callGroqApi(prompt),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('API request timed out')), 8000))
+          new Promise((_, reject) => setTimeout(() => reject(new Error('API request timed out')), 6000))
         ]);
 
         console.log('Full Groq API response:', JSON.stringify(response, null, 2));
@@ -174,7 +206,7 @@ Example of a good question:
               }
         
               // Optional: Add a delay before retrying
-              await new Promise(resolve => setTimeout(resolve, 1000));
+              await new Promise(resolve => setTimeout(resolve, 200));
             }
           }
         
@@ -191,7 +223,7 @@ Example of a good question:
         console.error(`Attempt ${attempt} failed:`, error.message);
 
         if (attempt < maxRetries) {
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise(resolve => setTimeout(resolve, 200));
         }
       }
     }
@@ -215,7 +247,7 @@ Example of a good question:
   } catch (error) {
     console.error('Error generating question:', error.message);
     res.status(500).json({
-      error: 'Failed to generate a question. Please try again.',
+      error: "We couldn't generate your question at the moment. Please try again.",
       details: error.message
     });
   }
