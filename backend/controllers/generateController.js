@@ -126,7 +126,7 @@ Example of a good question:
 
         if (questionText) {
           // Base prompt for validation and refinement
-          const validationPromptBase = `Evaluate the following question and confirm if it meets the specified criteria. Provide "valid" or "invalid" as the result, and explain briefly why if invalid. If invalid, provide a refined version that meets the criteria.
+          const validationPromptBase = `Evaluate the following question and confirm if it meets the specified criteria. Provide "valid" or "invalid" as the result. If invalid, provide a refined version that meets the criteria.
         
         Criteria:
         - Personal and conversational
