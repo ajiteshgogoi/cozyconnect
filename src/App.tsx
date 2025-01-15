@@ -11,14 +11,20 @@ const App: React.FC = () => {
   const [questionReceived, setQuestionReceived] = useState(false);
 
   const generateQuestionInternal = async (retryCount = 0): Promise<void> => {
-    setLoading(true);
+    // Clear previous state
     setError(null);
     setIsAnimating(true);
+    setLoading(true);
     
     // Fade out current question
     await new Promise(resolve => setTimeout(resolve, 200));
     setQuestion(null);
 
+    // Create abort controller for cleanup
+    const abortController = new AbortController();
+    
+    let response: Response | undefined;
+    
     try {
       // Check network connectivity
       if (!navigator.onLine) {
@@ -29,7 +35,7 @@ const App: React.FC = () => {
         ? 'https://cozyconnect.vercel.app/api/generate'
         : 'http://localhost:5000/api/generate';
 
-      const response = await fetch(apiUrl, {
+      response = await fetch(apiUrl, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -41,52 +47,90 @@ const App: React.FC = () => {
       
       if (!response.ok) {
         const errorData = await response.json();
+        if (response.status === 429) {
+          // Parse the rate limit error details
+          const rateLimitError = JSON.parse(errorData.message);
+          const resetHeader = response.headers.get('X-RateLimit-Reset');
+          const resetTime = resetHeader ? parseInt(resetHeader, 10) : Math.floor(Date.now()/1000) + (15 * 60);
+          const retryMinutes = Math.ceil((resetTime - Math.floor(Date.now()/1000)) / 60);
+          
+          throw new Error(JSON.stringify({
+            type: 'error',
+            message: rateLimitError.message || 'Too many requests. Please try again later.',
+            details: rateLimitError.details || `Retry after ${retryMinutes} minutes`,
+            code: rateLimitError.code || 'RATE_LIMIT_EXCEEDED'
+          }));
+        }
         throw new Error(`API Error: ${response.status} - ${errorData.message || 'Unknown error'}`);
       }
       
       const data = await response.json();
       console.log('Received question:', data);
+      // Set question immediately but keep loading state
       setQuestion(data.question);
       setIsFirstQuestion(false);
       setQuestionReceived(true);
-    } catch (error) {
-      console.error('Error generating question:', error);
-      
-      // Retry logic with exponential backoff
-      if (retryCount < 2 && error instanceof Error && error.name !== 'AbortError') {
-        const delay = Math.pow(2, retryCount) * 1000; // Exponential backoff
-        await new Promise(resolve => setTimeout(resolve, delay));
-        return generateQuestionInternal(retryCount + 1);
-      }
+      setIsAnimating(false);
+      // Keep loading state for a moment to ensure smooth transition
+      await new Promise(resolve => setTimeout(resolve, 100));
+      setLoading(false);
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name !== 'AbortError') {
+        console.error('Error generating question:', error);
+        
+        // Retry logic with exponential backoff
+        if (retryCount < 2) {
+          const delay = Math.pow(2, retryCount) * 1000; // Exponential backoff
+          await new Promise(resolve => setTimeout(resolve, delay));
+          return generateQuestionInternal(retryCount + 1);
+        }
 
-      // Show error messages
-      let errorMessage = 'An unexpected error occurred. Please try again.';
-      if (error instanceof Error) {
-        try {
-          const errorData = JSON.parse(error.message.replace('API Error: ', ''));
-          if (errorData.type === 'error' && errorData.message) {
-            errorMessage = errorData.message;
-            if (errorData.details) {
-              errorMessage += ` (${errorData.details})`;
+        // Show error messages
+        let errorMessage = 'An unexpected error occurred. Please try again.';
+        
+        // Handle rate limit errors specifically
+        if (error.message.includes('RATE_LIMIT_EXCEEDED') || response?.status === 429) {
+          try {
+            const errorData = JSON.parse(error.message);
+            const remaining = response?.headers?.get('X-RateLimit-Remaining') || 0;
+            const resetHeader = response?.headers?.get('X-RateLimit-Reset');
+            const limit = response?.headers?.get('X-RateLimit-Limit') || 15;
+            
+            if (resetHeader) {
+              const resetTime = new Date(parseInt(resetHeader, 10) * 1000);
+              const minutesLeft = Math.ceil((resetTime.getTime() - Date.now()) / (60 * 1000));
+              
+              errorMessage = `You've reached the rate limit (${limit} requests per 15 minutes).\n\n`;
+              errorMessage += `Requests remaining: ${remaining}\n`;
+              errorMessage += `Reset in: ${minutesLeft} minute${minutesLeft !== 1 ? 's' : ''}\n\n`;
+              errorMessage += `Please try again after the reset time.`;
+            } else {
+              errorMessage = errorData.message || 'Rate limit exceeded. Please try again in 15 minutes.';
             }
-          } else if (error.message.includes('No internet connection')) {
-            errorMessage = error.message;
-          }
-        } catch {
-          if (error.message.includes('No internet connection')) {
-            errorMessage = error.message;
+          } catch (parseError) {
+            errorMessage = 'Rate limit exceeded. Please try again in 15 minutes.';
           }
         }
+        // Handle other API errors
+        else if (error.message.includes('No internet connection')) {
+          errorMessage = error.message;
+        }
+        
+        setError(errorMessage);
       }
-      
-      setError(errorMessage);
     } finally {
-      setIsAnimating(false);
-      // Only stop loading after animation completes
-      setTimeout(() => {
+      // Cleanup
+      abortController.abort();
+      
+      // Only clear loading state if we're not retrying
+      if (retryCount >= 2) {
+        // Wait for animations to complete before updating state
+        await new Promise(resolve => setTimeout(resolve, 200));
+        
+        setIsAnimating(false);
         setLoading(false);
         setQuestionReceived(false);
-      }, 200);
+      }
     }
   };
 

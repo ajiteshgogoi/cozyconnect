@@ -8,6 +8,7 @@ const apiLimiter = rateLimit({
   legacyHeaders: false,
   message: 'Too many generation requests. Please try again later.',
   handler: (req, res) => {
+    console.log(`Rate limit exceeded for IP ${req.ip}. ${req.rateLimit.remaining} requests remaining. Reset in ${Math.ceil((req.rateLimit.resetTime - Date.now())/1000)} seconds.`);
     res.status(429).json({
       error: 'Too many generation requests. Please try again later.'
     });
@@ -174,6 +175,7 @@ Example of a good question:
         if (questionText) {
           // Base prompt for validation and refinement
           const validationPromptBase = `Evaluate the following question and confirm if it meets the specified criteria. Provide "valid" or "invalid" as the result. If invalid, provide a refined version that meets the criteria.
+          If 
         
         Criteria:
         - Personal and conversational
@@ -253,22 +255,20 @@ Question: {questionText}`;
     if (!questionText || !validQuestionFound) {
       console.error('Failed to generate valid question:', lastError);
       
-      // Extract retry time from error message
-      let retryTime = 'a few minutes';
-      if (lastError?.message?.includes('Please try again in')) {
-        const timeMatch = lastError.message.match(/Please try again in (\d+m\d+\.\d+s)/);
-        if (timeMatch) {
-          const [minutes, seconds] = timeMatch[1].split('m');
-          // Round up to nearest minute
-          retryTime = `${Math.ceil(parseFloat(minutes) + (parseFloat(seconds)/60))} minutes`;
-        }
-      }
+      // Calculate retry time from rate limit headers
+      const resetTime = req.rateLimit?.resetTime?.getTime() || Date.now() + (15 * 60 * 1000);
+      const retryMinutes = Math.ceil((resetTime - Date.now()) / (60 * 1000));
       
-      return res.status(400).json({
+      // Add rate limit headers to error response
+      res.setHeader('X-RateLimit-Limit', req.rateLimit?.limit || 15);
+      res.setHeader('X-RateLimit-Remaining', req.rateLimit?.remaining || 0);
+      res.setHeader('X-RateLimit-Reset', Math.ceil(resetTime / 1000));
+      
+      return res.status(429).json({
         type: 'error',
-        message: `We couldn't generate a question due to high demand. Please try again in ${retryTime}.`,
-        details: lastError?.message || 'Question validation failed',
-        code: 'GENERATION_FAILED'
+        message: `Too many requests. Please try again in ${retryMinutes} minutes.`,
+        details: lastError?.message || 'Rate limit exceeded',
+        code: 'RATE_LIMIT_EXCEEDED'
       });
     }
 
