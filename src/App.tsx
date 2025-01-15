@@ -87,7 +87,7 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <div className="bg-orange-50 min-h-screen flex flex-col items-center justify-center p-4 bg-[radial-gradient(#e0e0e0_12%,transparent_12%)] bg-[length:24px_24px]">
+      <div className="bg-orange-50 min-h-screen flex flex-col items-center justify-center p-4 bg-[radial-gradient(#e0e0e0_6%,transparent_6%)] bg-[length:24px_24px] md:bg-[radial-gradient(#e0e0e0_12%,transparent_12%)]">
         <Header />
 
         <Routes>
@@ -103,9 +103,9 @@ const App: React.FC = () => {
                     Instructions
                   </Link>
                 </div>
-                <div className="p-8 rounded-lg shadow-xl w-full text-orange-900 text-center min-h-[160px] flex items-center justify-center relative overflow-hidden mb-6 bg-white/50 backdrop-blur-sm">
+                <div className="bg-orange-50 p-8 rounded-lg shadow-xl w-full text-orange-900 text-center min-h-[160px] flex items-center justify-center relative overflow-hidden mb-6">
                   <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-orange-200 to-pink-200 blur opacity-40"></div>
-                  <div className="absolute inset-[2px] rounded-lg bg-white/50 backdrop-blur-sm"></div>
+                  <div className="absolute inset-[2px] rounded-lg bg-orange-50"></div>
                   <div className="relative z-10 -mt-2">
                     {loading ? (
                       <p className="text-orange-700/80 animate-pulse">Generating question...</p>
@@ -170,7 +170,7 @@ const Header: React.FC = () => {
         onClick={() => window.location.href = '/'}
         className="cursor-pointer"
       >
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-500 pb-2 leading-tight drop-shadow-[0_2px_4px_rgba(255,192,203,0.3)] flex items-center justify-center">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-500 pb-2 leading-tight drop-shadow-[0_2px_4px_rgba(255,192,203,0.3)] flex items-center justify-center">
           <span className="mr-3">❤️</span>
           Cozy Connect
         </h1>
