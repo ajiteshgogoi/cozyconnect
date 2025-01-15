@@ -29,7 +29,8 @@
       "dest": "/index.html",
       "headers": {
         "Cache-Control": "no-cache"
-      }
+      },
+      "continue": true
     }
   ]
 }
