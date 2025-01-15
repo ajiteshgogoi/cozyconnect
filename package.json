@@ -2,6 +2,7 @@
   "name": "easyconnect",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:5000",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
@@ -25,7 +26,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "vercel-build": "npm install && npm run build && cd backend && npm install"
+    "vercel-build": "CI=false npm install && CI=false npm run build && cd backend && npm install --legacy-peer-deps --verbose || (echo 'Backend install failed' && exit 1)"
   },
   "eslintConfig": {
     "extends": [
