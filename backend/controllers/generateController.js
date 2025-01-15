@@ -3,13 +3,13 @@ const rateLimit = require('express-rate-limit');
 // Rate limiting middleware
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 10 requests per windowMs
+  max: 15, // Limit each IP to 10 requests per windowMs
   standardHeaders: true,
   legacyHeaders: false,
-  message: 'Too many requests, please try again later.',
+  message: 'Too many generation requests. Please try again later.',
   handler: (req, res) => {
     res.status(429).json({
-      error: 'Too many requests, please try again later.'
+      error: 'Too many generation requests. Please try again later.'
     });
   }
 });
@@ -263,7 +263,7 @@ Example of a good question:
       }
       
       return res.status(400).json({
-        error: `We couldn't generate a valid question. Please try again in ${retryTime}.`,
+        error: `We couldn't generate a question due to high demand. Please try again in ${retryTime}.`,
         details: lastError?.message || 'Question validation failed'
       });
     }
@@ -285,7 +285,7 @@ Example of a good question:
   } catch (error) {
     console.error('Error generating question:', error.message);
     res.status(500).json({
-      error: "We couldn't generate your question at the moment.😢 Please try again.",
+      error: "We couldn't generate your question.😢 Please try again.",
       details: error.message
     });
   }

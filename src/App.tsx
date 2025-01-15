@@ -57,10 +57,8 @@ const App: React.FC = () => {
         return generateQuestionInternal(retryCount + 1);
       }
 
-      // User-friendly error messages
-      let errorMessage = 'Failed to generate question. Please try again.';
-      
-      // Handle backend error response
+      // Show error messages
+      let errorMessage = '';
       if (error instanceof Error) {
         try {
           const errorData = JSON.parse(error.message.replace('API Error: ', ''));
@@ -70,7 +68,6 @@ const App: React.FC = () => {
             errorMessage = error.message;
           }
         } catch {
-          // Fallback to original error handling
           if (error.message.includes('No internet connection')) {
             errorMessage = error.message;
           }
