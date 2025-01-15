@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const Instructions: React.FC = () => {
   return (
     <div className="min-h-screen p-4">
-      <div className="bg-white/20 backdrop-blur-sm p-4 rounded-lg shadow-lg w-full mx-4 md:mx-auto md:max-w-2xl border border-white/20 relative overflow-visible">
+      <div className="bg-white/20 backdrop-blur-sm p-4 rounded-lg shadow-lg w-full md:mx-auto md:max-w-2xl border border-white/20 relative overflow-visible">
         <h1 className="text-3xl font-bold text-orange-600 mb-6">How to Use Cozy Connect</h1>
         
         <div className="space-y-6 text-orange-800">
