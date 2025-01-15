@@ -175,7 +175,7 @@ const Header: React.FC = () => {
           Cozy Connect
         </h1>
       </div>
-      <div className="bg-orange-900/90 rounded-lg px-8 py-1 w-full max-w-2xl">
+      <div className="bg-orange-900/90 rounded-lg px-8 py-1 w-full max-w-2xl mt-1">
         <p className="text-l text-orange-50">Meaningful prompts for heartfelt conversations.</p>
       </div>
     </header>
