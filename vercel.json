@@ -9,34 +9,13 @@
         "buildCommand": "npm run build",
         "installCommand": "npm install && npm install typescript@latest"
       }
-    },
-    {
-      "src": "backend/server.js",
-      "use": "@vercel/node"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "backend/server.js"
-    },
-    {
-      "src": "/static/(.*)",
-      "dest": "/build/static/$1",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000, immutable"
-      }
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/build/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/build/index.html",
-      "headers": {
-        "Cache-Control": "no-cache"
-      }
+      "source": "/(.*)",
+      "destination": "/"
     }
-  ]
+  ],
+  "cleanUrls": true
 }
