@@ -222,7 +222,7 @@ Example of a good question:
       // Return rate limit details to frontend
       return res.status(429).json({
         type: 'error',
-        message: 'Too many generation requests. Please try again later.',
+        message: "You've exceeded the number of generations. Please try again later.",
         code: 'MIDDLEWARE_RATE_LIMIT',
         reset: Math.ceil((req.rateLimit.resetTime - Date.now())/1000),
         remaining: 0,
@@ -236,6 +236,7 @@ Example of a good question:
     }
 
     // Add middleware rate limit headers to response
+    res.setHeader('Access-Control-Expose-Headers', 'X-Middleware-RateLimit-Limit, X-Middleware-RateLimit-Remaining, X-Middleware-RateLimit-Reset');
     res.setHeader('X-Middleware-RateLimit-Limit', req.rateLimit.limit);
     res.setHeader('X-Middleware-RateLimit-Remaining', req.rateLimit.remaining);
     res.setHeader('X-Middleware-RateLimit-Reset', Math.ceil(req.rateLimit.resetTime.getTime() / 1000));
