@@ -35,7 +35,14 @@ exports.callGroqApi = async (prompt) => {
     
     // Add rate limit information if available
     if (status === 429) {
-      apiError.retryAfter = headers['retry-after'] ? String(headers['retry-after']) : headers['x-ratelimit-reset-requests'] || '900'; // Use retry-after or reset time or default to 15 minutes
+      // Convert retry-after to minutes if available, otherwise use reset time
+      const retrySeconds = headers['retry-after'] ? 
+        parseInt(headers['retry-after']) : 
+        (headers['x-ratelimit-reset-requests'] ? 
+          parseTimeStringToSeconds(headers['x-ratelimit-reset-requests']) : 
+          900);
+      
+      apiError.retryAfter = Math.ceil(retrySeconds / 60); // Convert to minutes
       apiError.rateLimit = {
         limit: headers['x-ratelimit-limit-requests'],
         remaining: headers['x-ratelimit-remaining-requests'],
@@ -47,3 +54,18 @@ exports.callGroqApi = async (prompt) => {
     throw apiError;
   }
 };
+
+// Helper function to convert time strings like "1h30m" to seconds
+function parseTimeStringToSeconds(timeString) {
+  if (!timeString) return 900;
+  
+  // Match hours, minutes, seconds
+  const matches = timeString.match(/(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/);
+  if (!matches) return 900;
+  
+  const hours = parseInt(matches[1] || 0);
+  const minutes = parseInt(matches[2] || 0);
+  const seconds = parseInt(matches[3] || 0);
+  
+  return (hours * 3600) + (minutes * 60) + seconds;
+}

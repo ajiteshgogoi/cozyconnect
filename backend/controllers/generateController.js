@@ -255,11 +255,9 @@ Question: {questionText}`;
     if (!questionText || !validQuestionFound) {
       console.error('Failed to generate valid question:', lastError);
       
-      // Extract retry time from Groq API error
-      const groqRetryAfter = lastError?.headers?.['retry-after'] || lastError?.headers?.get?.('retry-after');
-      const retrySeconds = groqRetryAfter ? parseInt(groqRetryAfter, 10) : 15 * 60;
-      const resetTime = Date.now() + (retrySeconds * 1000);
-      const retryMinutes = Math.ceil(retrySeconds / 60);
+      // Use the retry time from the apiError object
+      const retryMinutes = lastError?.retryAfter || 15;
+      const resetTime = Date.now() + (retryMinutes * 60 * 1000);
       
       // Add rate limit headers to error response
       res.setHeader('X-RateLimit-Limit', req.rateLimit?.limit || 15);
