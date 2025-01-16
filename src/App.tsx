@@ -90,10 +90,15 @@ const App: React.FC = () => {
         
             // Handle rate limit errors
             if (response?.status === 429) {
-              errorMessage = 'Rate limit exceeded. Please try again later.';
+              try {
+                const errorData = JSON.parse(error.message);
+                errorMessage = errorData.message || 'We are experiencing issues due to high number of generation requests. Please come back later.';
+              } catch {
+                errorMessage = 'We are experiencing issues due to high number of generation requests. Please come back later.';
+              }
             }
-        // Handle other API errors
-        else if (error.message.includes('No internet connection')) {
+            // Handle other API errors
+            else if (error.message.includes('No internet connection')) {
           errorMessage = error.message;
         }
         

@@ -266,7 +266,7 @@ Question: {questionText}`;
       // Return rate limit details to frontend
       return res.status(429).json({
         type: 'error',
-        message: `Too many requests. You have ${req.rateLimit.remaining} requests remaining. Please try again later.`,
+        message: 'We are experiencing issues due to high number of generation requests. Please come back later.',
         code: 'MIDDLEWARE_RATE_LIMIT',
         remaining: req.rateLimit.remaining,
         limit: req.rateLimit.limit,
