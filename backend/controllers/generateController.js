@@ -255,9 +255,11 @@ Question: {questionText}`;
     if (!questionText || !validQuestionFound) {
       console.error('Failed to generate valid question:', lastError);
       
-      // Calculate retry time from rate limit headers
-      const resetTime = req.rateLimit?.resetTime?.getTime() || Date.now() + (15 * 60 * 1000);
-      const retryMinutes = Math.ceil((resetTime - Date.now()) / (60 * 1000));
+      // Extract retry time from Groq API error
+      const groqRetryAfter = lastError?.headers?.['retry-after'] || lastError?.headers?.get?.('retry-after');
+      const retrySeconds = groqRetryAfter ? parseInt(groqRetryAfter, 10) : 15 * 60;
+      const resetTime = Date.now() + (retrySeconds * 1000);
+      const retryMinutes = Math.ceil(retrySeconds / 60);
       
       // Add rate limit headers to error response
       res.setHeader('X-RateLimit-Limit', req.rateLimit?.limit || 15);
@@ -266,7 +268,7 @@ Question: {questionText}`;
       
       return res.status(429).json({
         type: 'error',
-        message: `Too many requests. Please try again in ${retryMinutes} minutes.`,
+        message: `Too many requests. Please try again in ${retryMinutes} minute${retryMinutes !== 1 ? 's' : ''}.`,
         details: lastError?.message || 'Rate limit exceeded',
         code: 'RATE_LIMIT_EXCEEDED'
       });

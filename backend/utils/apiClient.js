@@ -21,11 +21,29 @@ exports.callGroqApi = async (prompt) => {
     console.log('Received response from Groq API');
     return chatCompletion.choices[0].message.content;
   } catch (error) {
-    if (error.message.includes('timeout')) {
-      console.error('Groq API request timed out');
-      throw new Error('Request timed out. Please try again.');
+    // Extract all relevant error information
+    const headers = error?.response?.headers || error?.headers || error?.error?.response?.headers || {};
+    const status = error.status || error.error?.status || 500;
+    const message = error.message || 'API request failed';
+    const response = error.response || error.error?.response;
+    
+    // Create enriched error object
+    const apiError = new Error(message);
+    apiError.headers = headers;
+    apiError.status = status;
+    apiError.response = response;
+    
+    // Add rate limit information if available
+    if (status === 429) {
+      apiError.retryAfter = headers['retry-after'] ? String(headers['retry-after']) : headers['x-ratelimit-reset-requests'] || '900'; // Use retry-after or reset time or default to 15 minutes
+      apiError.rateLimit = {
+        limit: headers['x-ratelimit-limit-requests'],
+        remaining: headers['x-ratelimit-remaining-requests'],
+        reset: headers['x-ratelimit-reset-requests']
+      };
     }
-    console.error('Groq API error:', error);
-    throw error;
+    
+    console.error('Groq API error:', apiError);
+    throw apiError;
   }
 };
