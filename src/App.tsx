@@ -73,10 +73,13 @@ const App: React.FC = () => {
       setQuestionReceived(true);
       // Keep loading state with slight overlap
       await new Promise(resolve => setTimeout(resolve, 150));
-      setIsAnimating(false);
       setLoading(false);
+      // Allow animation to complete before removing animating state
+      await new Promise(resolve => setTimeout(resolve, 200));
+      setIsAnimating(false);
     } catch (error: unknown) {
       if (error instanceof Error && error.name !== 'AbortError') {
+        let responseText = '';
         console.error('Error generating question:', error);
         
         // Retry logic with exponential backoff
@@ -95,19 +98,58 @@ const App: React.FC = () => {
         // Show error messages
         let errorMessage = 'An unexpected error occurred. Please try again.';
         
-            // Handle rate limit errors
-            if (response?.status === 429) {
-              try {
-                const errorData = typeof error.message === 'string' ? JSON.parse(error.message) : error.message;
-                if (errorData.code === 'MIDDLEWARE_RATE_LIMIT') {
-                  const resetSeconds = errorData.reset || 900;
-                  const resetMinutes = Math.ceil(resetSeconds / 60);
-                  errorMessage = `Too many generation requests. Please try again in ${resetMinutes} minute${resetMinutes > 1 ? 's' : ''}.`;
-                } else {
-                  errorMessage = errorData.message || 'We are experiencing issues due to high number of generation requests. Please come back later.';
-                }
-              } catch {
-                errorMessage = 'We are experiencing issues due to high number of generation requests. Please come back later.';
+                // Handle rate limit errors
+                if (response?.status === 429) {
+                  try {
+                    // Store response text first since body can only be read once
+                    responseText = await response.text();
+                    console.log('Rate limit response text:', responseText);
+                    
+                    // Parse the response text
+                    const errorResponse = JSON.parse(responseText);
+                    console.log('Parsed error response:', errorResponse);
+                    
+                    // Parse the nested error string
+                    const errorData = JSON.parse(errorResponse.error);
+                    console.log('Parsed error data:', errorData);
+                    
+                    // Extract rate limit details from headers
+                    const resetSeconds = parseInt(response.headers.get('X-Middleware-RateLimit-Reset') || '0', 10);
+                    const remainingRequests = parseInt(response.headers.get('X-Middleware-RateLimit-Remaining') || '0', 10);
+                    const limit = parseInt(response.headers.get('X-Middleware-RateLimit-Limit') || '15', 10);
+                    
+                    if (resetSeconds <= 0) {
+                      throw new Error('Invalid reset time');
+                    }
+                    
+                    const resetMinutes = Math.ceil(resetSeconds / 60);
+                    
+                    // Build detailed error message
+                    errorMessage = `You've reached the limit of ${limit} questions. `;
+                    if (remainingRequests > 0) {
+                      errorMessage += `You have ${remainingRequests} requests remaining. `;
+                    }
+                    errorMessage += `Please try again in ${resetMinutes} minute${resetMinutes > 1 ? 's' : ''}.`;
+                
+                // Log rate limit details
+                console.log('Rate limit details:', {
+                  responseText,
+                  resetSeconds,
+                  remainingRequests,
+                  limit,
+                  headers: {
+                    'X-Middleware-RateLimit-Reset': response.headers.get('X-Middleware-RateLimit-Reset'),
+                    'X-Middleware-RateLimit-Remaining': response.headers.get('X-Middleware-RateLimit-Remaining'),
+                    'X-Middleware-RateLimit-Limit': response.headers.get('X-Middleware-RateLimit-Limit')
+                  },
+                  errorData
+                });
+              } catch (error) {
+                console.error('Error handling rate limit:', error);
+                // Fallback message with rate limit details from headers
+                const resetSeconds = parseInt(response.headers.get('X-Middleware-RateLimit-Reset') || '900', 10);
+                const resetMinutes = Math.ceil(resetSeconds / 60);
+                errorMessage = `You've reached the question generation limit. Please try again in ${resetMinutes} minute${resetMinutes > 1 ? 's' : ''}.`;
               }
             }
             // Handle other API errors
@@ -156,7 +198,7 @@ const App: React.FC = () => {
                     ) : (
                       <p className={`text-l font-medium text-orange-900/90 transition-opacity duration-200 ${
                         isAnimating ? 'opacity-0' : 'opacity-100'
-                      }`}>
+                      }`} style={{ textShadow: isFirstQuestion ? 'none' : '0px 1px 2px rgba(0,0,0,0.1)' }}>
                         {isFirstQuestion ? "Click 'Generate a Question' to get a prompt..." : question}
                       </p>
                     )}
