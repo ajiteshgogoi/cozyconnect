@@ -52,6 +52,9 @@ const perspectives = [
   'through the eyes of a mentor',
   'from the perspective of a learner',
   'cultural lens',
+  'through the lens of gratitude',
+  'through the lens of an outsider',
+  'through the eyes of a loved one',
   'generational perspective',  
   'milestones in life',
   'global view',
@@ -176,7 +179,7 @@ Example of a good question:
 
         if (questionText) {
           // Simplified validation and refinement process
-          const refinementPrompt = `Refine this question to meet all criteria:
+          const refinementPrompt = `Refine this question to improve its quality and to meet all criteria:
           - Personal and conversational          
           - Clear and easy to understand
           - Open-ended (cannot be answered with just 'Yes' or 'No')
