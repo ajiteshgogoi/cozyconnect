@@ -13,6 +13,7 @@ const App: React.FC = () => {
   const generateQuestionInternal = async (retryCount = 0): Promise<void> => {
     // Clear previous state
     setError(null);
+    setQuestionReceived(false);
     setIsAnimating(true);
     setLoading(true);
     
