@@ -35,14 +35,7 @@ exports.callGroqApi = async (prompt) => {
     
     // Add rate limit information if available
     if (status === 429) {
-      // Convert retry-after to minutes if available, otherwise use reset time
-      const retrySeconds = headers['retry-after'] ? 
-        parseInt(headers['retry-after']) : 
-        (headers['x-ratelimit-reset-requests'] ? 
-          parseTimeStringToSeconds(headers['x-ratelimit-reset-requests']) : 
-          900);
-      
-      apiError.retryAfter = Math.ceil(retrySeconds / 60); // Convert to minutes
+      // Log detailed rate limit information
       apiError.rateLimit = {
         limit: headers['x-ratelimit-limit-requests'],
         remaining: headers['x-ratelimit-remaining-requests'],

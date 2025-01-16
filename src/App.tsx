@@ -88,22 +88,10 @@ const App: React.FC = () => {
         // Show error messages
         let errorMessage = 'An unexpected error occurred. Please try again.';
         
-            // Handle rate limit errors specifically
-            if (error.message.includes('RATE_LIMIT_EXCEEDED') || response?.status === 429) {
-              try {
-                const errorData = JSON.parse(error.message);
-                const remaining = response?.headers?.get('X-RateLimit-Remaining') || 0;
-                const retryAfter = response?.headers?.get('retry-after') || '900'; // Default to 15 minutes
-                const limit = response?.headers?.get('X-RateLimit-Limit') || 15;
-                
-                const retrySeconds = parseInt(retryAfter, 10);
-                const minutesLeft = Math.ceil(retrySeconds / 60);
-                
-                errorMessage = `Rate limit exceeded. Please try again in ${minutesLeft} minute${minutesLeft !== 1 ? 's' : ''}.`;
-          } catch (parseError) {
-            errorMessage = 'Rate limit exceeded. Please try again in 15 minutes.';
-          }
-        }
+            // Handle rate limit errors
+            if (response?.status === 429) {
+              errorMessage = 'Rate limit exceeded. Please try again later.';
+            }
         // Handle other API errors
         else if (error.message.includes('No internet connection')) {
           errorMessage = error.message;

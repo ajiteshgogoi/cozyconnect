@@ -255,27 +255,29 @@ Question: {questionText}`;
     if (!questionText || !validQuestionFound) {
       console.error('Failed to generate valid question:', lastError);
       
-      // Use the retry time from the apiError object
-      const retryMinutes = lastError?.retryAfter || 15;
-      const resetTime = Date.now() + (retryMinutes * 60 * 1000);
+      // Log detailed error information to terminal
+      console.error('Rate limit exceeded:', {
+        retryAfter: lastError?.retryAfter,
+        rateLimit: lastError?.rateLimit,
+        headers: lastError?.headers,
+        status: lastError?.status
+      });
       
-      // Add rate limit headers to error response
-      res.setHeader('X-RateLimit-Limit', req.rateLimit?.limit || 15);
-      res.setHeader('X-RateLimit-Remaining', req.rateLimit?.remaining || 0);
-      res.setHeader('X-RateLimit-Reset', Math.ceil(resetTime / 1000));
-      
+      // Return rate limit details to frontend
       return res.status(429).json({
         type: 'error',
-        message: `Too many requests. Please try again in ${retryMinutes} minute${retryMinutes !== 1 ? 's' : ''}.`,
-        details: lastError?.message || 'Rate limit exceeded',
-        code: 'RATE_LIMIT_EXCEEDED'
+        message: `Too many requests. You have ${req.rateLimit.remaining} requests remaining. Please try again later.`,
+        code: 'MIDDLEWARE_RATE_LIMIT',
+        remaining: req.rateLimit.remaining,
+        limit: req.rateLimit.limit,
+        reset: Math.ceil((req.rateLimit.resetTime - Date.now())/1000)
       });
     }
 
-    // Add rate limit headers to response
-    res.setHeader('X-RateLimit-Limit', req.rateLimit.limit);
-    res.setHeader('X-RateLimit-Remaining', req.rateLimit.remaining);
-    res.setHeader('X-RateLimit-Reset', Math.ceil(req.rateLimit.resetTime.getTime() / 1000));
+    // Add middleware rate limit headers to response
+    res.setHeader('X-Middleware-RateLimit-Limit', req.rateLimit.limit);
+    res.setHeader('X-Middleware-RateLimit-Remaining', req.rateLimit.remaining);
+    res.setHeader('X-Middleware-RateLimit-Reset', Math.ceil(req.rateLimit.resetTime.getTime() / 1000));
     
     res.status(200).json({
       question: questionText,
