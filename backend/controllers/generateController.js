@@ -10,12 +10,10 @@ const apiLimiter = rateLimit({
   handler: (req, res) => {
     console.log(`Rate limit exceeded for IP ${req.ip}. ${req.rateLimit.remaining} requests remaining. Reset in ${Math.ceil((req.rateLimit.resetTime - Date.now())/1000)} seconds.`);
     res.status(429).json({
-      error: JSON.stringify({
-        type: 'error',
-        message: `Too many generation requests. Please try again in ${Math.ceil((req.rateLimit.resetTime - Date.now())/1000)} seconds.`,
-        code: 'MIDDLEWARE_RATE_LIMIT',
-        reset: Math.ceil((req.rateLimit.resetTime - Date.now())/1000)
-      })
+      type: 'error',
+      message: `Too many generation requests. Please try again in ${Math.ceil((req.rateLimit.resetTime - Date.now())/1000)} seconds.`,
+      code: 'MIDDLEWARE_RATE_LIMIT',
+      reset: Math.ceil((req.rateLimit.resetTime - Date.now())/1000)
     });
   }
 });
@@ -223,12 +221,17 @@ Example of a good question:
       
       // Return rate limit details to frontend
       return res.status(429).json({
-        error: JSON.stringify({
-          type: 'error',
-          message: 'Too many generation requests. Please try again later.',
-          code: 'MIDDLEWARE_RATE_LIMIT',
-          reset: Math.ceil((req.rateLimit.resetTime - Date.now())/1000)
-        })
+        type: 'error',
+        message: 'Too many generation requests. Please try again later.',
+        code: 'MIDDLEWARE_RATE_LIMIT',
+        reset: Math.ceil((req.rateLimit.resetTime - Date.now())/1000),
+        remaining: 0,
+        limit: req.rateLimit.limit,
+        headers: {
+          'X-Middleware-RateLimit-Reset': Math.ceil(req.rateLimit.resetTime.getTime() / 1000),
+          'X-Middleware-RateLimit-Remaining': 0,
+          'X-Middleware-RateLimit-Limit': req.rateLimit.limit
+        }
       });
     }
 
