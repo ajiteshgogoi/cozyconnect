@@ -6,11 +6,16 @@ const apiLimiter = rateLimit({
   max: 15, // Limit each IP to 15 requests per windowMs
   standardHeaders: true,
   legacyHeaders: false,
-  message: 'Too many generation requests. Please try again later.',
+  message: (req) => `Too many generation requests. Please try again in ${Math.ceil((req.rateLimit.resetTime - Date.now())/1000)} seconds.`,
   handler: (req, res) => {
     console.log(`Rate limit exceeded for IP ${req.ip}. ${req.rateLimit.remaining} requests remaining. Reset in ${Math.ceil((req.rateLimit.resetTime - Date.now())/1000)} seconds.`);
     res.status(429).json({
-      error: 'Too many generation requests. Please try again later.'
+      error: JSON.stringify({
+        type: 'error',
+        message: `Too many generation requests. Please try again in ${Math.ceil((req.rateLimit.resetTime - Date.now())/1000)} seconds.`,
+        code: 'MIDDLEWARE_RATE_LIMIT',
+        reset: Math.ceil((req.rateLimit.resetTime - Date.now())/1000)
+      })
     });
   }
 });
@@ -51,7 +56,6 @@ const perspectives = [
   'cultural lens',
   'generational perspective',  
   'milestones in life',
-  'community perspective',
   'global view',
   'a turning point',
   'the perspective of hindsight'
@@ -173,72 +177,25 @@ Example of a good question:
         questionText = response.trim();
 
         if (questionText) {
-          // Base prompt for validation and refinement
-          const validationPromptBase = `Evaluate the following question and confirm if it meets the specified criteria. Provide "valid" or "invalid" as the result. If invalid, provide a refined version that meets the criteria.
-          If 
-        
-        Criteria:
-        - Personal and conversational
-        - Clear and easy to understand
-        - Encourages sharing of a story, experience, insight, or opinion
-        - Avoids trivial, vague, overly simple, or abstract questions
-        - Avoids close-ended phrasing and incorrect grammar
-        - Includes at least one of these words: you, your, yours
-        - No usage of these words: I, me, my, mine
-        
-Question: {questionText}`;
-        
-          let refinedQuestion = questionText;
-          let validationResponse = null;
-        
-          const extractRefinedQuestion = (validationResult) => {
-            const match = validationResult.match(/Refined version:\s*(.+)/);
-            return match ? match[1].trim() : null;
-          };
-        
-          for (let validationAttempt = 1; validationAttempt <= (maxRetries + 1); validationAttempt++) {
-            try {
-              // Generate validation prompt
-          const validationPrompt = validationPromptBase.replace('{questionText}', refinedQuestion);
-              const validationResult = await callGroqApi(validationPrompt);
-        
-              console.log('Validation Response:', JSON.stringify(validationResult, null, 2));
-        
-              // Check for validity
-              if (/^\s*valid\b(?!\w)/i.test(validationResult)) {
-                // Remove surrounding quotes if present
-                validationResponse = refinedQuestion.replace(/^["']|["']$/g, '');
-                validQuestionFound = true;
-                questionText = validationResponse; // Update the question text with validated version
-                break;
-              }
-        
-              // Attempt to extract and refine the question
-              const extractedRefinement = extractRefinedQuestion(validationResult);
-              if (extractedRefinement) {
-                refinedQuestion = extractedRefinement; // Update the question for next attempt
-              } else {
-                throw new Error('Refinement failed: No refined question extracted.');
-              }
-            } catch (validationError) {
-              console.error(`Validation attempt ${validationAttempt} failed:`, validationError.message);
-        
-              if (validationAttempt === maxRetries) {
-                throw new Error('Validation failed after maximum retries.');
-              }
-        
-              // Optional: Add a delay before retrying
-              await new Promise(resolve => setTimeout(resolve, 200));
-            }
-          }
-        
-          if (validQuestionFound) {
-            // Use the validated and potentially refined question
-            questionText = validationResponse;
-            break;
-          } else {
-            throw new Error('Question failed validation');
-          }
+          // Simplified validation and refinement process
+          const refinementPrompt = `Refine this question to meet all criteria:
+          - Personal and conversational          
+          - Clear and easy to understand
+          - Open-ended (cannot be answered with just 'Yes' or 'No')
+          - Correct grammar and punctuation
+          - Avoids trivial, vague, overly simple, or abstract questions
+          - Encourages sharing of a story, experience, insight, or opinion
+          - Uses "you/your" instead of "I/me/my"
+          - Avoids compound questions (Asks only one question)
+          
+          Original question: ${questionText}
+          
+          Return only the refined question:`;
+          
+          const refinedQuestion = await callGroqApi(refinementPrompt);
+          questionText = refinedQuestion.trim();
+          validQuestionFound = true;
+          break;
         } else {
           throw new Error('Invalid response format.');
         }
@@ -265,12 +222,12 @@ Question: {questionText}`;
       
       // Return rate limit details to frontend
       return res.status(429).json({
-        type: 'error',
-        message: 'We are experiencing issues due to high number of generation requests. Please come back later.',
-        code: 'MIDDLEWARE_RATE_LIMIT',
-        remaining: req.rateLimit.remaining,
-        limit: req.rateLimit.limit,
-        reset: Math.ceil((req.rateLimit.resetTime - Date.now())/1000)
+        error: JSON.stringify({
+          type: 'error',
+          message: 'Too many generation requests. Please try again later.',
+          code: 'MIDDLEWARE_RATE_LIMIT',
+          reset: Math.ceil((req.rateLimit.resetTime - Date.now())/1000)
+        })
       });
     }
 

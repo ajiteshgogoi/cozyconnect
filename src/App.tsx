@@ -70,9 +70,9 @@ const App: React.FC = () => {
       setQuestion(data.question);
       setIsFirstQuestion(false);
       setQuestionReceived(true);
+      // Keep loading state until animation completes
+      await new Promise(resolve => setTimeout(resolve, 300));
       setIsAnimating(false);
-      // Keep loading state for a moment to ensure smooth transition
-      await new Promise(resolve => setTimeout(resolve, 100));
       setLoading(false);
     } catch (error: unknown) {
       if (error instanceof Error && error.name !== 'AbortError') {
@@ -85,14 +85,26 @@ const App: React.FC = () => {
           return generateQuestionInternal(retryCount + 1);
         }
 
+        // Only clear loading state after all retries are exhausted
+        await new Promise(resolve => setTimeout(resolve, 200));
+        setIsAnimating(false);
+        setLoading(false);
+        setQuestionReceived(false);
+
         // Show error messages
         let errorMessage = 'An unexpected error occurred. Please try again.';
         
             // Handle rate limit errors
             if (response?.status === 429) {
               try {
-                const errorData = JSON.parse(error.message);
-                errorMessage = errorData.message || 'We are experiencing issues due to high number of generation requests. Please come back later.';
+                const errorData = typeof error.message === 'string' ? JSON.parse(error.message) : error.message;
+                if (errorData.code === 'MIDDLEWARE_RATE_LIMIT') {
+                  const resetSeconds = errorData.reset || 900;
+                  const resetMinutes = Math.ceil(resetSeconds / 60);
+                  errorMessage = `Too many generation requests. Please try again in ${resetMinutes} minute${resetMinutes > 1 ? 's' : ''}.`;
+                } else {
+                  errorMessage = errorData.message || 'We are experiencing issues due to high number of generation requests. Please come back later.';
+                }
               } catch {
                 errorMessage = 'We are experiencing issues due to high number of generation requests. Please come back later.';
               }
@@ -107,16 +119,6 @@ const App: React.FC = () => {
     } finally {
       // Cleanup
       abortController.abort();
-      
-      // Only clear loading state if we're not retrying
-      if (retryCount >= 2) {
-        // Wait for animations to complete before updating state
-        await new Promise(resolve => setTimeout(resolve, 200));
-        
-        setIsAnimating(false);
-        setLoading(false);
-        setQuestionReceived(false);
-      }
     }
   };
 
