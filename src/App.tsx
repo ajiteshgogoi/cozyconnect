@@ -52,8 +52,11 @@ const App: React.FC = () => {
           // Parse the rate limit error details
           const rateLimitError = JSON.parse(errorData.message);
           const resetHeader = response.headers.get('X-RateLimit-Reset');
-          const resetTime = resetHeader ? parseInt(resetHeader, 10) : Math.floor(Date.now()/1000) + (15 * 60);
-          const retryMinutes = Math.ceil((resetTime - Math.floor(Date.now()/1000)) / 60);
+          const resetSeconds = parseInt(response.headers.get('X-Middleware-RateLimit-Reset') || '0', 10);
+          if (resetSeconds <= 0) {
+            throw new Error('Invalid reset time');
+          }
+          const retryMinutes = Math.ceil(resetSeconds / 60);
           
           throw new Error(JSON.stringify({
             type: 'error',
@@ -146,10 +149,21 @@ const App: React.FC = () => {
                 });
               } catch (error) {
                 console.error('Error handling rate limit:', error);
-                // Fallback message with rate limit details from headers
-                const resetSeconds = parseInt(response.headers.get('X-Middleware-RateLimit-Reset') || '900', 10);
-                const resetMinutes = Math.ceil(resetSeconds / 60);
-                errorMessage = `You've reached the question generation limit. Please try again in ${resetMinutes} minute${resetMinutes > 1 ? 's' : ''}.`;
+                // Get reset time from headers
+                const resetSeconds = parseInt(response.headers.get('X-Middleware-RateLimit-Reset') || '0', 10);
+                if (resetSeconds <= 0) {
+                  errorMessage = 'Rate limit exceeded. Please try again later.';
+                } else {
+                  const resetMinutes = Math.ceil(resetSeconds / 60);
+                  const remainingRequests = parseInt(response.headers.get('X-Middleware-RateLimit-Remaining') || '0', 10);
+                  const limit = parseInt(response.headers.get('X-Middleware-RateLimit-Limit') || '15', 10);
+                  
+                  errorMessage = `You've reached the limit of ${limit} questions. `;
+                  if (remainingRequests > 0) {
+                    errorMessage += `You have ${remainingRequests} requests remaining. `;
+                  }
+                  errorMessage += `Please try again in ${resetMinutes} minute${resetMinutes > 1 ? 's' : ''}.`;
+                }
               }
             }
             // Handle other API errors
