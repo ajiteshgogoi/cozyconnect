@@ -17,8 +17,8 @@ const App: React.FC = () => {
     setIsAnimating(true);
     setLoading(true);
     
-    // Fade out current question
-    await new Promise(resolve => setTimeout(resolve, 200));
+    // Fade out current question with slight delay
+    await new Promise(resolve => setTimeout(resolve, 150));
     setQuestion(null);
 
     // Create abort controller for cleanup
@@ -71,8 +71,8 @@ const App: React.FC = () => {
       setQuestion(data.question);
       setIsFirstQuestion(false);
       setQuestionReceived(true);
-      // Keep loading state until animation completes
-      await new Promise(resolve => setTimeout(resolve, 300));
+      // Keep loading state with slight overlap
+      await new Promise(resolve => setTimeout(resolve, 150));
       setIsAnimating(false);
       setLoading(false);
     } catch (error: unknown) {
@@ -87,7 +87,7 @@ const App: React.FC = () => {
         }
 
         // Only clear loading state after all retries are exhausted
-        await new Promise(resolve => setTimeout(resolve, 200));
+        await new Promise(resolve => setTimeout(resolve, 150));
         setIsAnimating(false);
         setLoading(false);
         setQuestionReceived(false);

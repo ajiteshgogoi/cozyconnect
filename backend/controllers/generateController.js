@@ -194,6 +194,7 @@ Example of a good question:
           
           const refinedQuestion = await callGroqApi(refinementPrompt);
           questionText = refinedQuestion.trim();
+          console.log('Refined question:', questionText);
           validQuestionFound = true;
           break;
         } else {
