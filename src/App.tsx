@@ -201,21 +201,23 @@ const App: React.FC = () => {
                     Instructions
                   </Link>
                 </div>
-                <div className="bg-orange-50 p-8 rounded-lg shadow-xl w-full text-orange-900 text-center min-h-[160px] flex items-center justify-center relative overflow-hidden mb-6">
-                  <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-orange-200 to-pink-200 blur opacity-40"></div>
-                  <div className="absolute inset-[2px] rounded-lg bg-orange-50"></div>
-                  <div className="relative z-10 -mt-2">
-                    {loading && !questionReceived ? (
-                      <p className="text-orange-700/80 animate-pulse">Generating question...</p>
-                    ) : error ? (
-                      <p className="text-red-500">{error}</p>
-                    ) : (
-                      <p className={`text-l font-medium text-orange-900/90 transition-opacity duration-200 ${
-                        isAnimating ? 'opacity-0' : 'opacity-100'
-                      }`} style={{ textShadow: isFirstQuestion ? 'none' : '0px 1px 2px rgba(0,0,0,0.1)' }}>
-                        {isFirstQuestion ? "Click 'Generate a Question' to get a prompt..." : question}
-                      </p>
-                    )}
+                <div className="w-full mb-6">
+                  <div className="bg-orange-50 p-8 rounded-lg shadow-xl w-full text-orange-900 text-center h-[200px] flex items-center justify-center relative overflow-hidden">
+                    <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-orange-200 to-pink-200 blur opacity-40"></div>
+                    <div className="absolute inset-[2px] rounded-lg bg-orange-50"></div>
+                    <div className="relative z-10 -mt-2 h-full w-full overflow-y-auto flex items-center justify-center">
+                      {loading && !questionReceived ? (
+                        <p className="text-orange-700/80 animate-pulse">Generating question...</p>
+                      ) : error ? (
+                        <p className="text-red-500">{error}</p>
+                      ) : (
+                        <p className={`text-l font-medium text-orange-900/90 transition-opacity duration-200 ${
+                          isAnimating ? 'opacity-0' : 'opacity-100'
+                        }`} style={{ textShadow: isFirstQuestion ? 'none' : '0px 1px 2px rgba(0,0,0,0.1)' }}>
+                          {isFirstQuestion ? "Click 'Generate a Question' to get a prompt..." : question}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
 
