@@ -2,8 +2,8 @@ const { callGroqApi } = require('../utils/apiClient');
 const rateLimit = require('express-rate-limit');
 // Rate limiting middleware
 const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 15, // Limit each IP to 15 requests per windowMs
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 5, // Limit each IP to 5 requests per windowMs
   standardHeaders: true,
   legacyHeaders: false,
   message: (req) => `Too many generation requests. Please try again in ${Math.ceil((req.rateLimit.resetTime - Date.now())/1000)} seconds.`,

@@ -50,20 +50,20 @@ const App: React.FC = () => {
         const errorData = await response.json();
         if (response.status === 429) {
           // Parse the rate limit error details
-          const rateLimitError = JSON.parse(errorData.message);
-          const resetHeader = response.headers.get('X-RateLimit-Reset');
-          const resetSeconds = parseInt(response.headers.get('X-Middleware-RateLimit-Reset') || '0', 10);
-          if (resetSeconds <= 0) {
-            throw new Error('Invalid reset time');
-          }
-          const retryMinutes = Math.ceil(resetSeconds / 60);
+          const resetSeconds = errorData.reset || parseInt(response.headers.get('X-Middleware-RateLimit-Reset') || '0', 10);
+          const remainingRequests = errorData.remaining || parseInt(response.headers.get('X-Middleware-RateLimit-Remaining') || '0', 10);
+          const limit = errorData.limit || parseInt(response.headers.get('X-Middleware-RateLimit-Limit') || '5', 10);
           
-          throw new Error(JSON.stringify({
-            type: 'error',
-            message: rateLimitError.message || 'Too many requests. Please try again later.',
-            details: rateLimitError.details || `Retry after ${retryMinutes} minutes`,
-            code: rateLimitError.code || 'RATE_LIMIT_EXCEEDED'
-          }));
+          if (resetSeconds > 0) {
+            const timeDisplay = resetSeconds > 60 
+              ? `${Math.ceil(resetSeconds / 60)} minute${Math.ceil(resetSeconds / 60) !== 1 ? 's' : ''}`
+              : `${resetSeconds} second${resetSeconds !== 1 ? 's' : ''}`;
+            
+            let errorMessage = errorData.message || `You've reached the limit of ${limit} questions. Please try again in ${timeDisplay}.`;
+            
+            throw new Error(errorMessage);
+          }
+          throw new Error(errorData.message || 'Too many requests. Please try again later.');
         }
         throw new Error(`API Error: ${response.status} - ${errorData.message || 'Unknown error'}`);
       }
@@ -80,8 +80,9 @@ const App: React.FC = () => {
       // Allow animation to complete before removing animating state
       await new Promise(resolve => setTimeout(resolve, 200));
       setIsAnimating(false);
-    } catch (error: unknown) {
-      if (error instanceof Error && error.name !== 'AbortError') {
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err : new Error(String(err));
+      if (error.name !== 'AbortError') {
         let responseText = '';
         console.error('Error generating question:', error);
         
@@ -101,73 +102,38 @@ const App: React.FC = () => {
         // Show error messages
         let errorMessage = 'An unexpected error occurred. Please try again.';
         
-                // Handle rate limit errors
-                if (response?.status === 429) {
-                  try {
-                    // Store response text first since body can only be read once
-                    responseText = await response.text();
-                    console.log('Rate limit response text:', responseText);
-                    
-                    // Parse the response text
-                    const errorResponse = JSON.parse(responseText);
-                    console.log('Parsed error response:', errorResponse);
-                    
-                    // Parse the nested error string
-                    const errorData = JSON.parse(errorResponse.error);
-                    console.log('Parsed error data:', errorData);
-                    
-                    // Extract rate limit details from headers
-                    const resetSeconds = parseInt(response.headers.get('X-Middleware-RateLimit-Reset') || '0', 10);
-                    const remainingRequests = parseInt(response.headers.get('X-Middleware-RateLimit-Remaining') || '0', 10);
-                    const limit = parseInt(response.headers.get('X-Middleware-RateLimit-Limit') || '15', 10);
-                    
-                    if (resetSeconds <= 0) {
-                      throw new Error('Invalid reset time');
-                    }
-                    
-                    const resetMinutes = Math.ceil(resetSeconds / 60);
-                    
-                    // Build detailed error message
-                    errorMessage = `You've reached the limit of ${limit} questions. `;
-                    if (remainingRequests > 0) {
-                      errorMessage += `You have ${remainingRequests} requests remaining. `;
-                    }
-                    errorMessage += `Please try again in ${resetMinutes} minute${resetMinutes > 1 ? 's' : ''}.`;
-                
-                // Log rate limit details
-                console.log('Rate limit details:', {
-                  responseText,
-                  resetSeconds,
-                  remainingRequests,
-                  limit,
-                  headers: {
-                    'X-Middleware-RateLimit-Reset': response.headers.get('X-Middleware-RateLimit-Reset'),
-                    'X-Middleware-RateLimit-Remaining': response.headers.get('X-Middleware-RateLimit-Remaining'),
-                    'X-Middleware-RateLimit-Limit': response.headers.get('X-Middleware-RateLimit-Limit')
-                  },
-                  errorData
-                });
-              } catch (error) {
-                console.error('Error handling rate limit:', error);
-                // Get reset time from headers
-                const resetSeconds = parseInt(response.headers.get('X-Middleware-RateLimit-Reset') || '0', 10);
-                if (resetSeconds <= 0) {
-                  errorMessage = 'Rate limit exceeded. Please try again later.';
-                } else {
-                  const resetMinutes = Math.ceil(resetSeconds / 60);
-                  const remainingRequests = parseInt(response.headers.get('X-Middleware-RateLimit-Remaining') || '0', 10);
-                  const limit = parseInt(response.headers.get('X-Middleware-RateLimit-Limit') || '15', 10);
-                  
-                  errorMessage = `You've reached the limit of ${limit} questions. `;
-                  if (remainingRequests > 0) {
-                    errorMessage += `You have ${remainingRequests} requests remaining. `;
-                  }
-                  errorMessage += `Please try again in ${resetMinutes} minute${resetMinutes > 1 ? 's' : ''}.`;
-                }
-              }
+        // Handle rate limit errors
+        if (response?.status === 429) {
+            let errorResponse;
+            try {
+              // First try to get rate limit details from response body
+              const parsedError = await response.json();
+              errorResponse = {
+                reset: parsedError.reset,
+                limit: parsedError.limit,
+                message: parsedError.message
+              };
+            
+            // Use the reset time directly as it's already in seconds
+            const resetSeconds = errorResponse.reset;
+            const limit = errorResponse.limit;
+            
+            if (resetSeconds > 0) {
+              const timeDisplay = resetSeconds > 60 
+                ? `${Math.ceil(resetSeconds / 60)} minute${Math.ceil(resetSeconds / 60) !== 1 ? 's' : ''}`
+                : `${resetSeconds} second${resetSeconds !== 1 ? 's' : ''}`;
+              
+              errorMessage = errorResponse.message;
+              errorMessage += ` Please try again in ${timeDisplay}.`;
+            } else {
+              errorMessage = errorResponse.message;
             }
-            // Handle other API errors
-            else if (error.message.includes('No internet connection')) {
+          } catch {
+            errorMessage = "You've exceeded the number of questions. Please try again later.";
+          }
+        }
+        // Handle other API errors
+        else if (error.message.includes('No internet connection')) {
           errorMessage = error.message;
         }
         
@@ -223,7 +189,7 @@ const App: React.FC = () => {
 
                 <div className="w-full max-w-2xl flex justify-center pt-2 pb-4">
                   <p className="text-xs text-gray-500 text-center">
-                    <span className="underline">Note:</span> During high demand, question generation may take longer. Thank you for your patience!
+                    <span className="underline">Note:</span> To prevent issues from too many generation requests, you're limited to 5 question generations every 10 minutes.
                   </p>
                 </div>
 
