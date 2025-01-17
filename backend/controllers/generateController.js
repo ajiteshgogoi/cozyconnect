@@ -57,7 +57,6 @@ const perspectives = [
   'through the eyes of a loved one',
   'generational perspective',  
   'milestones in life',
-  'global view',
   'a turning point',
   'the perspective of hindsight'
 ];
@@ -112,7 +111,23 @@ const emotionalModifiers = [
   'cathartic',
   'peaceful',
   'euphoric',
-  'fateful'
+  'fateful',
+  'transformative',
+  'healing',
+  'enlightening',
+  'melancholic',
+  'surreal',
+  'arduous',
+  'tumultuous',
+  'triumphant',
+  'serene',
+  'raw',
+  'haunting',
+  'grounding',
+  'optimistic',
+  'restorative',
+  'thought-provoking',
+  'inspiring'
 ];
 
 // Helper function to shuffle an array
@@ -182,6 +197,7 @@ Example of a good question:
           const refinementPrompt = `Refine this question to improve its quality and to meet all criteria:
           - Personal and conversational          
           - Clear and easy to understand
+          - At 8th grade reading level
           - Open-ended (cannot be answered with just 'Yes' or 'No')
           - Correct grammar and punctuation
           - Avoids trivial, vague, overly simple, or abstract questions
