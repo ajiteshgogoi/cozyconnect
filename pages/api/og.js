@@ -8,12 +8,6 @@ export default async function handler(request) {
   try {
     const { searchParams } = new URL(request.url);
     
-    // Set headers
-    const headers = new Headers({
-      'Content-Type': 'image/png',
-      'Access-Control-Allow-Origin': '*',
-      'Cache-Control': 'public, max-age=86400, s-maxage=86400'
-    });
     const title = searchParams.get('title') || 'CozyConnect';
     const description = searchParams.get('description') || 'Share your stories and connect with others';
 
@@ -59,11 +53,12 @@ export default async function handler(request) {
       }
     );
 
+    // Convert to proper binary response
     return new Response(imageResponse.body, {
       headers: {
         'Content-Type': 'image/png',
-        'Access-Control-Allow-Origin': '*',
-        'Cache-Control': 'public, max-age=86400, s-maxage=86400'
+        'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+        'Content-Disposition': 'inline; filename="og-image.png"'
       }
     });
   } catch (e) {
