@@ -16,10 +16,7 @@
   "rewrites": [
     {
       "source": "/api/og",
-      "destination": "/pages/api/og.tsx",
-      "headers": {
-        "Content-Type": "image/png"
-      }
+      "destination": "/pages/api/og.tsx"
     },
     {
       "source": "/api/(.*)",
@@ -28,6 +25,17 @@
     {
       "source": "/(.*)",
       "destination": "/"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/og",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "image/png"
+        }
+      ]
     }
   ]
 }
