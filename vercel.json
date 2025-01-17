@@ -14,11 +14,18 @@
     }
     
   ],
-  "functions": {
-    "pages/api/og.tsx": {
-      "runtime": "edge"
+
+  "headers": [
+    {
+      "source": "/api/og",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "image/png"
+        }
+      ]
     }
-  },
+  ],
   "rewrites": [
     {
       "source": "/api/og",
