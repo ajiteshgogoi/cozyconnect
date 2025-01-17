@@ -11,10 +11,15 @@
     {
       "src": "backend/server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "pages/api/og.tsx",
+      "use": "@vercel/og",
+      "config": {
+        "runtime": "edge"
+      }
     }
-    
   ],
-
   "headers": [
     {
       "source": "/api/og",
@@ -40,5 +45,4 @@
       "destination": "/"
     }
   ]
-  
 }
