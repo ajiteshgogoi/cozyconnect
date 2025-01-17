@@ -16,7 +16,10 @@ router.get('/generate/image', (req, res) => {
   }
   
   // Proxy request to Edge Runtime endpoint
-  const url = new URL('https://cozyconnect.vercel.app/api/og');
+  const baseUrl = process.env.NODE_ENV === 'production' 
+    ? 'https://cozyconnect.vercel.app/api/og'
+    : 'http://localhost:3000/api/og';
+  const url = new URL(baseUrl);
   url.searchParams.set('title', title);
   url.searchParams.set('description', description);
   
