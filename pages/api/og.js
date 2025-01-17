@@ -17,7 +17,7 @@ export default async function handler(request) {
     const title = searchParams.get('title') || 'CozyConnect';
     const description = searchParams.get('description') || 'Share your stories and connect with others';
 
-    return new ImageResponse(
+    const imageResponse = new ImageResponse(
       (
         <div
           style={{
@@ -56,9 +56,16 @@ export default async function handler(request) {
       {
         width: 1200,
         height: 630,
-        headers
       }
     );
+
+    return new Response(imageResponse.body, {
+      headers: {
+        'Content-Type': 'image/png',
+        'Access-Control-Allow-Origin': '*',
+        'Cache-Control': 'public, max-age=86400, s-maxage=86400'
+      }
+    });
   } catch (e) {
     console.error(e.message);
     return new Response('Failed to generate image', {
