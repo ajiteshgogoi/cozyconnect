@@ -17,8 +17,7 @@ export default function handler(request) {
     const title = searchParams.get('title') || 'CozyConnect';
     const description = searchParams.get('description') || 'Share your stories and connect with others';
 
-    return new Response(
-      new ImageResponse(
+    return new ImageResponse(
       (
         <div
           style={{
@@ -57,10 +56,9 @@ export default function handler(request) {
       {
         width: 1200,
         height: 630,
+        headers
       }
-    ), {
-      headers
-    });
+    );
   } catch (e) {
     console.error(e.message);
     return new Response('Failed to generate image', {
