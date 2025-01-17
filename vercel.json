@@ -11,24 +11,23 @@
     {
       "src": "backend/server.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "pages/api/og.tsx",
-      "use": "@vercel/edge"
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/og",
-      "destination": "/pages/api/og.tsx"
+      "src": "/api/og",
+      "dest": "/pages/api/og.tsx",
+      "headers": {
+        "Content-Type": "image/png"
+      }
     },
     {
-      "source": "/api/(.*)",
-      "destination": "backend/server.js"
+      "src": "/api/(.*)",
+      "dest": "backend/server.js"
     },
     {
-      "source": "/(.*)",
-      "destination": "/"
+      "src": "/(.*)",
+      "dest": "/"
     }
   ]
 }
