@@ -16,7 +16,7 @@
   "rewrites": [
     {
       "source": "/og-image",
-      "destination": "/pages/api/og.js"
+      "destination": "/pages/api/og.tsx"
     },
     {
       "source": "/api/(.*)",

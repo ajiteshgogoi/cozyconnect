@@ -4,14 +4,13 @@ export const config = {
   runtime: 'edge',
 };
 
-export default async function handler(request) {
+export default async function handler(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    
     const title = searchParams.get('title') || 'CozyConnect';
     const description = searchParams.get('description') || 'Share your stories and connect with others';
 
-    const imageResponse = new ImageResponse(
+    return new ImageResponse(
       (
         <div
           style={{
@@ -52,16 +51,7 @@ export default async function handler(request) {
         height: 630,
       }
     );
-
-    // Convert to proper binary response
-    return new Response(imageResponse.body, {
-      headers: {
-        'Content-Type': 'image/png',
-        'Cache-Control': 'public, max-age=86400, s-maxage=86400',
-        'Content-Disposition': 'inline; filename="og-image.png"'
-      }
-    });
-  } catch (e) {
+  } catch (e: any) {
     console.error(e.message);
     return new Response('Failed to generate image', {
       status: 500,
