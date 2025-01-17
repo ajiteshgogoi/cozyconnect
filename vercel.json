@@ -15,16 +15,18 @@
   ],
   "rewrites": [
     {
-      "source": "/og-image",
-      "destination": "/pages/api/og.tsx"
-    },
-    {
       "source": "/api/(.*)",
       "destination": "backend/server.js"
     },
     {
       "source": "/(.*)",
       "destination": "/"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/og",
+      "dest": "/pages/api/og.tsx"
     }
   ]
 }
