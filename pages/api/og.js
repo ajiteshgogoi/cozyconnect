@@ -4,7 +4,7 @@ export const config = {
   runtime: 'edge',
 };
 
-export default function handler(request) {
+export default async function handler(request) {
   try {
     const { searchParams } = new URL(request.url);
     
