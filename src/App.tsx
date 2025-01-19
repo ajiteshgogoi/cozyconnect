@@ -187,7 +187,7 @@ const App: React.FC = () => {
             Buy Me a Coffee
           </a>
           <div className="text-gray-500 text-sm mt-4">
-            © ajitesh gogoi
+            © {new Date().getFullYear()} ajitesh gogoi. All rights reserved.
           </div>
         </footer>
       </div>
