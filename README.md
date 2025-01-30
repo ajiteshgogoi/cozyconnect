@@ -2,7 +2,7 @@
 
 CozyConnect is an AI-powered conversation starter generator that helps foster meaningful connections through thoughtfully crafted questions. It generates natural, engaging prompts spanning different life perspectives and themes.
 
-❤️ **[Try CozyConnect Now](https://cozyconnect.vercel.app/)**
+❤️ **[Try CozyConnect](https://cozyconnect.vercel.app/)**
 
 ## Key Features
 
