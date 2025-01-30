@@ -15,7 +15,7 @@ exports.callGroqApi = async (prompt) => {
     console.log('Sending prompt to Groq API:', prompt);
     const chatCompletion = await client.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "deepseek-r1-distill-llama-70b"
+      model: "llama-3.3-70b-versatile"
     });
     
     console.log('Received response from Groq API');
