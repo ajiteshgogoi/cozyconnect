@@ -25,3 +25,6 @@ yarn-error.log*
 
 # backend environment variables
 backend/.env
+
+# documentation
+documentation.md
