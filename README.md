@@ -1,114 +1,55 @@
-# Cozy Connect - Conversation Prompts
+# CozyConnect
 
-Cozy Connect is an AI-powered conversation starter generator designed to foster natural, engaging conversations through simple, friendly questions. It helps break the ice and deepen connections by encouraging thoughtful interactions.
-## Features
+CozyConnect is an AI-powered conversation starter generator that helps foster meaningful connections through thoughtfully crafted questions. It generates natural, engaging prompts spanning different life perspectives and themes.
 
-- **Natural Questions**: Generates conversational prompts that sound authentic and friendly
-- **Time-Based Perspectives**: Questions span from childhood memories to future aspirations
-- **Simple & Clear**: Each question is concise and easy to understand
-- **Positive Focus**: Emphasizes uplifting and engaging topics
-- **Story-Friendly**: Encourages sharing of experiences and memories
+❤️ **[Try CozyConnect Now](https://cozyconnect.vercel.app/)**
 
-## Question Categories
+## Key Features
 
-### Themes
-- **Relationships**: Trust, friendship, family, love, connection
-- **Personal Growth**: Change, challenges, learning, strengths, decisions
-- **Values**: Purpose, success, beliefs, passion, helping others
-- **Life Experiences**: Adventures, achievements, mistakes, surprises, transitions
+- **Natural Generation**: Creates authentic, friendly conversation starters
+- **Time Perspectives**: Spans childhood memories to future aspirations
+- **Smart Categories**: Organizes questions by relationships, growth, values, and experiences
+- **Emotional Intelligence**: Incorporates emotional modifiers for deeper engagement
+- **Intelligent Refinement**: Questions are validated and refined for clarity and impact
+- **Error Resilient**: Includes retry mechanisms and timeout handling
 
-### Time Perspectives
-- **Childhood**: Early years and childhood memories
-- **Past**: Teen years through recent past experiences
-- **Present**: Current situations and ongoing experiences
-- **Future**: Goals, dreams, and aspirations
+## How It Works
 
-## Installation
+1. **Generation**: 
+   - Select theme and perspective combinations
+   - Apply emotional modifiers for depth
+   - Generate base question using AI
 
-1. Clone the repository:
-```bash
-git clone https://github.com/ajiteshgogoi/cozyconnect.git
-cd cozyconnect
-```
+2. **Processing**:
+   - Validate question structure and content
+   - Refine for clarity and engagement
+   - Ensure personal and conversational tone
+   - Apply grammar and readability checks
 
-2. Install dependencies:
-```bash
-npm install
-```
+3. **Response**:
+   - Return refined conversation starter
+   - Include metadata about theme and perspective
+   - Deliver within 6-second timeout window
 
-3. Set up your environment variables:
-```bash
-cp .env.example .env
-# Add your LLM API credentials to .env
-```
+## Technical Stack
 
-## Usage
+- Frontend: React, TypeScript
+- Backend: Node.js
+- AI Integration: Groq API for question generation
+- Hosting: Vercel
 
-### API Endpoint
+## Rate Limits
 
-```javascript
-POST /api/generate
+- 5 requests per 10 minutes per IP
+- 6-second timeout per generation
+- Automatic retry mechanism on failure
 
-// Response
-{
-  "question": "What made you really happy as a child?"
-}
-```
+## Support
 
-### Example Integration
+For bugs or feedback, please contact ajiteshgogoi@gmail.com.
 
-```javascript
-const response = await fetch('/api/generate', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
-
-const data = await response.json();
-console.log(data.question);
-```
-
-## Question Guidelines
-
-Each generated question follows these principles:
-- Under 15 words long
-- Focuses on a single, clear topic
-- Uses simple, everyday language
-- Sounds natural and conversational
-- Encourages storytelling and sharing
-
-## Configuration
-
-You can customize the generator by modifying:
-- `themes` array: Adjust conversation topics
-- `perspectives` array: Modify time perspectives
-- `questionPatterns` object: Update question templates for each perspective
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Thanks to [LLM Provider] for powering our question generation
-- Inspired by human connection and the art of meaningful conversation
-
-## Contact
-
-For help, please open an issue in the repository or contact us at ajiteshgogoi@gmail.com
-
-## Support Me
-If you enjoy my work and would like to support me, you can buy me a coffee:
-
-[![Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/gogoi)
+<p align="left">
+  <a href="https://ko-fi.com/gogoi">
+    <img src="https://img.shields.io/badge/Buy_Me_A_Coffee-Support_Development-FFDD00?style=for-the-badge&logo=ko-fi&logoColor=black" alt="Buy Me A Coffee" />
+  </a>
+</p>
