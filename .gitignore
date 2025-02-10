@@ -28,3 +28,12 @@ backend/.env
 
 # documentation
 documentation.md
+
+# Android/TWA specific
+*.keystore
+app-release-signed.apk
+app-release-bundle.aab
+/app/build/
+/gradle/
+/.gradle/
+local.properties
