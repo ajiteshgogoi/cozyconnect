@@ -38,7 +38,7 @@ const providers = {
       'X-Title': 'CozyConnect'
     }),
     envKeyName: 'OPENROUTER_API_KEY',
-    defaultModel: 'openai/gpt-3.5-turbo',
+    defaultModel: 'google/gemini-2.0-flash-001',
     defaultTemperature: 0.7,
     handleError: (error) => {
       const headers = error?.response?.headers || {};
