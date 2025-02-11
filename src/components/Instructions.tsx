@@ -41,17 +41,17 @@ const Instructions: React.FC = () => {
               <div>
                 <h3 className="font-semibold mb-2">iOS:</h3>
                 <ol className="list-decimal list-inside space-y-2">
-                  <li>On Safari, tap the Share button</li>
-                  <li>Select Add to Home Screen</li>
-                  <li>Tap Add to install</li>
+                  <li>On Safari, tap the 'Share' button</li>
+                  <li>Select 'Add to Home Screen'</li>
+                  <li>Tap 'Add' to install</li>
                 </ol>
               </div>
               <div>
                 <h3 className="font-semibold mb-2">Android:</h3>
                 <ol className="list-decimal list-inside space-y-2">
                   <li>Tap the install prompt when it appears, or</li>
-                  <li>Open menu (3 dots) and select</li>
-                  <li>Install app or Add to Home screen</li>
+                  <li>Open menu (3 dots on top right corner)</li>
+                  <li>Select 'Install app' or 'Add to Home screen'</li>
                 </ol>
               </div>
             </div>
