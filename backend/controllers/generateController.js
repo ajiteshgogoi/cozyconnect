@@ -157,7 +157,7 @@ const generateQuestionHandler = async (req, res) => {
     const emotionalModifier = getRandomElements(emotionalModifiers, 1)[0];
 
     // Randomise word limit slightly
-    const wordLimit = Math.floor(Math.random() * 9) + 12; // Range: 12-20
+    const wordLimit = Math.floor(Math.random() * 6) + 10; // Range: 10-15 words
 
     // Build the prompt for the LLM
     const prompt = `Generate a ${emotionalModifier} and thought-provoking open-ended question about the theme: "${selectedTheme}" (subtheme: "${selectedSubtheme}"), from the perspective of "${randomPerspective}". Start the question with "${randomStarter}".
@@ -200,6 +200,7 @@ Example of a good question:
           - At 8th grade reading level
           - Open-ended (cannot be answered with just 'Yes' or 'No')
           - Correct grammar and punctuation
+          - Under ${wordLimit} words
           - Avoids trivial, vague, overly simple, or abstract questions
           - Encourages sharing of a story, experience, insight, or opinion
           - Uses "you/your" instead of "I/me/my"
