@@ -157,7 +157,7 @@ const generateQuestionHandler = async (req, res) => {
     const emotionalModifier = getRandomElements(emotionalModifiers, 1)[0];
 
     // Randomise word limit slightly
-    const wordLimit = Math.floor(Math.random() * 6) + 10; // Range: 10-15 words
+    const wordLimit = Math.floor(Math.random() * 11) + 10; // Range: 10-20 words
 
     // Build the prompt for the LLM
     const prompt = `Generate a ${emotionalModifier} and thought-provoking open-ended question about the theme: "${selectedTheme}" (subtheme: "${selectedSubtheme}"), from the perspective of "${randomPerspective}". Start the question with "${randomStarter}".
