@@ -51,7 +51,7 @@ const Instructions: React.FC = () => {
                 <ol className="list-decimal list-inside space-y-2">
                   <li>Tap the install prompt when it appears, or</li>
                   <li>Open menu (3 dots on top right corner)</li>
-                  <li>Select 'Install app' or 'Add to Home screen'</li>
+                  <li>Select 'Install app' or 'Add to home screen'</li>
                 </ol>
               </div>
             </div>
