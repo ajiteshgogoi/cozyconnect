@@ -1,4 +1,9 @@
-const fetch = require('node-fetch');
+// Import fetch dynamically at the module level
+let fetch;
+(async () => {
+  const module = await import('node-fetch');
+  fetch = module.default;
+})();
 
 // Provider configurations
 const providers = {
@@ -77,6 +82,10 @@ class LLMClient {
   }
 
   async generateCompletion(prompt) {
+    if (!fetch) {
+      throw new Error('Fetch is not initialized yet');
+    }
+
     try {
       console.log(`Sending prompt to ${this.provider.endpoint}:`, prompt);
       
@@ -124,7 +133,7 @@ function parseTimeStringToSeconds(timeString) {
 }
 
 // Export the main client function
-exports.callAiApi = async (prompt, providerName = 'openrouter', model = null, temperature = null) => {
+export const callAiApi = async (prompt, providerName = 'openrouter', model = null, temperature = null) => {
   const client = new LLMClient(providerName, model, temperature);
   return client.generateCompletion(prompt);
 };
