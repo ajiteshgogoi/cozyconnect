@@ -1,4 +1,4 @@
-const { callGroqApi } = require('../utils/apiClient');
+const { callAiApi } = require('../utils/apiClient');
 const rateLimit = require('express-rate-limit');
 // Rate limiting middleware
 const apiLimiter = rateLimit({
@@ -185,11 +185,11 @@ Example of a good question:
     for (let attempt = 1; attempt <= maxRetries && !validQuestionFound; attempt++) {
       try {
         const response = await Promise.race([
-          callGroqApi(prompt),
+          callAiApi(prompt),
           new Promise((_, reject) => setTimeout(() => reject(new Error('API request timed out')), 6000))
         ]);
 
-        console.log('Full Groq API response:', JSON.stringify(response, null, 2));
+        console.log('Full API response:', JSON.stringify(response, null, 2));
         questionText = response.trim();
 
         if (questionText) {
@@ -209,7 +209,7 @@ Example of a good question:
           
           Return only the refined question:`;
           
-          const refinedQuestion = await callGroqApi(refinementPrompt);
+          const refinedQuestion = await callAiApi(refinementPrompt);
           questionText = refinedQuestion.trim();
           console.log('Refined question:', questionText);
           validQuestionFound = true;
