@@ -36,6 +36,28 @@ const Instructions: React.FC = () => {
           </section>
 
           <section>
+            <h2 className="text-xl font-semibold mb-2">Installation Instructions:</h2>
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-semibold mb-2">iOS:</h3>
+                <ol className="list-decimal list-inside space-y-2">
+                  <li>On Safari, tap the Share button</li>
+                  <li>Select Add to Home Screen</li>
+                  <li>Tap Add to install</li>
+                </ol>
+              </div>
+              <div>
+                <h3 className="font-semibold mb-2">Android:</h3>
+                <ol className="list-decimal list-inside space-y-2">
+                  <li>Tap the install prompt when it appears, or</li>
+                  <li>Open menu (3 dots) and select</li>
+                  <li>Install app or Add to Home screen</li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section>
             <h2 className="text-xl font-semibold mb-2">If You Experience Any Issues:</h2>  
             <ol className="list-decimal list-inside space-y-3">
               <li>Check your internet connection.</li>
