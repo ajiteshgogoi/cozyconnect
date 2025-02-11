@@ -1,5 +1,5 @@
-const { callAiApi } = require('../utils/apiClient');
-const rateLimit = require('express-rate-limit');
+import { callAiApi } from '../utils/apiClient.js';
+import rateLimit from 'express-rate-limit';
 // Rate limiting middleware
 const apiLimiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
@@ -281,4 +281,4 @@ Example of a good question:
 };
 
 // Export with rate limiting middleware
-exports.generateQuestion = [apiLimiter, generateQuestionHandler];
+export const generateQuestion = [apiLimiter, generateQuestionHandler];
