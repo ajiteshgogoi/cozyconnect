@@ -169,16 +169,14 @@ const App: React.FC = () => {
                 </div>
 
                 <div className="w-full max-w-2xl flex justify-center pt-2 pb-4">
-                  <div className="bg-orange-50 p-4 rounded-lg shadow-md">
-                    <a
-                      href="https://touchbasepro.vercel.app/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#0EA5E9] hover:text-[#0EA5E9]/80 text-sm font-medium"
-                    >
-                      Stay connected with the people who matter most. Try TouchBase. <span className="text-[#0EA5E9]">💙</span>
-                    </a>
-                  </div>
+                  <a
+                    href="https://touchbasepro.vercel.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#0EA5E9] hover:text-[#0EA5E9]/80 text-sm font-medium text-center"
+                  >
+                    Stay connected with the people who matter most. Try TouchBase. <span className="text-[#0EA5E9]">💙</span>
+                  </a>
                 </div>
               </div>
             </>
