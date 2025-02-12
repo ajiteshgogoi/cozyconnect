@@ -175,7 +175,7 @@ const App: React.FC = () => {
                     rel="noopener noreferrer"
                     className="text-[#0EA5E9] hover:text-[#0EA5E9]/80 text-sm font-medium text-center"
                   >
-                    Stay connected with the people who matter most. Click to try TouchBase. <span className="text-[#0EA5E9]">💙</span>
+                    Stay connected with the people who matter most. Try TouchBase. <span className="text-[#0EA5E9]">💙</span>
                   </a>
                 </div>
               </div>
