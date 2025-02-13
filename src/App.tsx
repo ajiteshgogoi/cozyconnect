@@ -168,7 +168,7 @@ const App: React.FC = () => {
                   </button>
                   <div className="flex flex-col items-center mt-4">
                     <a
-                      href="https://touchbasepro.vercel.app/"
+                      href="https://www.touchbase.site/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="bg-[#F0F9FF] text-[#0EA5E9] font-medium py-1 px-2 rounded-md transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#F0F9FF] hover:-translate-y-0.5 hover:bg-[#E0F2FE] text-sm text-center"
