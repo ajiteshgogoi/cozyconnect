@@ -163,13 +163,14 @@ const generateQuestionHandler = async (req, res) => {
     const prompt = `Generate a ${emotionalModifier} and thought-provoking open-ended question about the theme: "${selectedTheme}" (subtheme: "${selectedSubtheme}"), from the perspective of "${randomPerspective}". Start the question with "${randomStarter}".
 
 MUST BE:
-- Personal and conversational
+- Personal and conversational (like a question from a friend)
 - Under ${wordLimit} words
 - Encourage sharing of a story, experience, insight or opinion
 AVOID:
 - Trivial or overly simple questions (e.g., "What did you eat today?")
 - Abstract or overly philosophical phrasing
 - Close-ended questions
+- Overly formal interview-style questions
 - Incorrect grammar
 - Addressing to self using words like 'I' and 'My' (e.g., "What memory from my past still influences my beliefs today?")
 - Questions that are too broad (e.g., "What was your best adventure?")
@@ -195,7 +196,7 @@ Example of a good question:
         if (questionText) {
           // Simplified validation and refinement process
           const refinementPrompt = `Refine this question to improve its quality and to meet all criteria:
-          - Personal and conversational          
+          - Personal and conversational (like a question from a friend)        
           - Clear and easy to understand
           - At 8th grade reading level
           - Open-ended (cannot be answered with just 'Yes' or 'No')
@@ -205,6 +206,7 @@ Example of a good question:
           - Encourages sharing of a story, experience, insight, or opinion
           - Uses "you/your" instead of "I/me/my"
           - Avoids compound questions (Asks only one question)
+          - Avoids overly formal interview-style questions
           
           Original question: ${questionText}
           
