@@ -170,7 +170,7 @@ AVOID:
 - Trivial or overly simple questions (e.g., "What did you eat today?")
 - Abstract or overly philosophical phrasing
 - Close-ended questions
-- Overly formal interview-style questions
+- Interview-style questions
 - Incorrect grammar
 - Addressing to self using words like 'I' and 'My' (e.g., "What memory from my past still influences my beliefs today?")
 - Questions that are too broad (e.g., "What was your best adventure?")
@@ -196,7 +196,8 @@ Example of a good question:
         if (questionText) {
           // Simplified validation and refinement process
           const refinementPrompt = `Refine this question to improve its quality and to meet all criteria:
-          - Personal and conversational (like a question from a friend)        
+          - Personal and conversational (like a question from a friend)
+          - Starts directly with the question. No interjections like 'Hey' preceding the question.        
           - Clear and easy to understand
           - At 8th grade reading level
           - Open-ended (cannot be answered with just 'Yes' or 'No')
@@ -206,7 +207,7 @@ Example of a good question:
           - Encourages sharing of a story, experience, insight, or opinion
           - Uses "you/your" instead of "I/me/my"
           - Avoids compound questions (Asks only one question)
-          - Avoids overly formal interview-style questions
+          - Avoids interview-style questions
           
           Original question: ${questionText}
           
