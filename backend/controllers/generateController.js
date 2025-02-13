@@ -197,7 +197,7 @@ Example of a good question:
           // Simplified validation and refinement process
           const refinementPrompt = `Refine this question to improve its quality and to meet all criteria:
           - Personal and conversational (like a question from a friend)
-          - Starts directly with the question. No interjections like 'Hey' preceding the question.        
+          - Contains only the question. No interjections like 'Hey' preceding the question.        
           - Clear and easy to understand
           - At 8th grade reading level
           - Open-ended (cannot be answered with just 'Yes' or 'No')
