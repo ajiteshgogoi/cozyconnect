@@ -3,7 +3,7 @@ import rateLimit from 'express-rate-limit';
 // Rate limiting middleware
 const apiLimiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 8, // Limit each IP to 5 requests per windowMs
+  max: 9, // Limit each IP to 5 requests per windowMs
   standardHeaders: true,
   legacyHeaders: false,
   message: (req) => `Too many generation requests. Please try again in ${Math.ceil((req.rateLimit.resetTime - Date.now())/1000)} seconds.`,
