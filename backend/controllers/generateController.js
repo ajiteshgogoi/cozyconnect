@@ -250,29 +250,28 @@ Example of a good question:
     }
 
     if (!questionText || !validQuestionFound) {
-      console.error('Failed to generate valid question:', lastError);
-      
-      // Log detailed error information to terminal
-      console.error('Rate limit exceeded:', {
-        retryAfter: lastError?.retryAfter,
-        rateLimit: lastError?.rateLimit,
-        headers: lastError?.headers,
-        status: lastError?.status
-      });
-      
-      // Return rate limit details to frontend
-      return res.status(429).json({
+      console.error('Failed to generate valid question after retries:', lastError);
+
+      // Check if the error is specifically a rate limit error from the *underlying AI API*
+      if (lastError?.status === 429 && lastError?.rateLimit) {
+        // If it's an AI API rate limit, return that specific error
+        return res.status(429).json({
+          type: 'error',
+          message: `AI Provider rate limit hit. Reset in ${lastError.rateLimit.reset || 'unknown'}`,
+          code: 'AI_PROVIDER_RATE_LIMIT',
+          details: lastError.message,
+          rateLimit: lastError.rateLimit
+        });
+      }
+
+      // If it's any other error during generation (timeout, invalid response, etc.)
+      // return a generic server error, NOT a 429 based on the middleware's state,
+      // as the middleware didn't block this request.
+      return res.status(500).json({
         type: 'error',
-        message: "You've exceeded the number of generations. Please try again later.",
-        code: 'MIDDLEWARE_RATE_LIMIT',
-        reset: Math.ceil((req.rateLimit.resetTime - Date.now())/1000),
-        remaining: 0,
-        limit: req.rateLimit.limit,
-        headers: {
-          'X-Middleware-RateLimit-Reset': Math.ceil(req.rateLimit.resetTime.getTime() / 1000),
-          'X-Middleware-RateLimit-Remaining': 0,
-          'X-Middleware-RateLimit-Limit': req.rateLimit.limit
-        }
+        message: "Failed to generate question after retries.",
+        code: 'GENERATION_FAILED',
+        details: lastError?.message || 'Unknown error during generation'
       });
     }
 
