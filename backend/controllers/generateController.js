@@ -254,13 +254,17 @@ Example of a good question:
 
       // Check if the error is specifically a rate limit error from the *underlying AI API*
       if (lastError?.status === 429 && lastError?.rateLimit) {
-        // If it's an AI API rate limit, return that specific error
+        // If it's an AI API rate limit, return that specific error using the standard message format
+        // We use the middleware's req.rateLimit details if available, otherwise estimate from the AI error
+        const resetTime = req.rateLimit?.resetTime ? Math.ceil((req.rateLimit.resetTime - Date.now()) / 1000) : (parseTimeStringToSeconds(lastError.rateLimit?.reset) || 'unknown');
         return res.status(429).json({
           type: 'error',
-          message: `AI Provider rate limit hit. Reset in ${lastError.rateLimit.reset || 'unknown'}`,
-          code: 'AI_PROVIDER_RATE_LIMIT',
-          details: lastError.message,
-          rateLimit: lastError.rateLimit
+          message: `Too many generation requests. Please try again in ${resetTime} seconds.`,
+          code: 'AI_PROVIDER_RATE_LIMIT', // Keep a distinct code for AI provider limits
+          details: `AI Provider: ${lastError.message}`,
+          reset: resetTime,
+          // Include AI provider specific rate limit details if available
+          providerRateLimit: lastError.rateLimit
         });
       }
 
